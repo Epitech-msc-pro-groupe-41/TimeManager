@@ -15,11 +15,17 @@ public class User {
     @Indexed(unique = true)
     private String userID;
 
-    @NotNull(message = "Username must not be null")
-    private String username;
+    @NotNull(message = "Firstname must not be null")
+    private String firstName;
+
+    @NotNull(message = "LastName must not be null")
+    private String lastName;
 
     @NotNull(message = "User's mail must not be null")
     private String email;
+
+    @NotNull(message = "Password must not be null")
+    private String password;
 
     @NotNull(message = "User's type must not be null")
     private String type;
@@ -40,14 +46,6 @@ public class User {
         this.userID = userID;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -62,5 +60,29 @@ public class User {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

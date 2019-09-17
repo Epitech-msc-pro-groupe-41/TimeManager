@@ -1,7 +1,5 @@
 package com.timemanager.core.src.model;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,8 +14,6 @@ public class Team {
     private String teamID;
 
     private String name;
-
-    private List<String> members;
 
     private long createDate;
 
@@ -45,14 +41,6 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<String> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<String> members) {
-        this.members = members;
     }
 
     public long getCreateDate() {
