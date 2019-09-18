@@ -1,0 +1,11 @@
+.top-navbar {
+  padding: 0 10px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  background-color: #4159b5;
+  align-content: center; }
+
+/*# sourceMappingURL=navbar.component.css.map */

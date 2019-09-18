@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../_services';
+import {UserService} from '../../_services';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -39,7 +39,9 @@ export class RegisterComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
+  get f() {
+    return this.registerForm.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -51,15 +53,26 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     this.userService.register(this.f.email.value, this.f.username.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          console.log('register: ', data);
-          this.router.navigate([this.returnUrl]);
+      .subscribe(response => {
+
+          if (response && response.userID) {
+
+            this.userService.getMe(response.userID)
+              .pipe(first())
+              .subscribe(
+                data => {
+                  console.log('register: ', data);
+                  this.router.navigate([this.returnUrl]);
+                },
+                err => {
+                  this.error = err;
+                  this.loading = false;
+                });
+          }
         },
-        error => {
-          this.error = error;
-          this.loading = false;
-        });
+        err => {
+          this.error = err;
+        }
+      );
   }
 }

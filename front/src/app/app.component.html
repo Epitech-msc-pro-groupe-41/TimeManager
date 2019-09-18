@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<app-navbar *ngIf="userService.currentUserValue"></app-navbar>
+<mat-sidenav-container class="app-view">
+  <mat-sidenav class="sidenav" mode="side" [opened]="userService.currentUserValue && userService.sidenavOpened">
+    <mat-action-list>
+      <button mat-list-item routerLink="" > Dashboard  </button>
+      <button mat-list-item routerLink="clockmanager" > Clock Manager </button>
+      <button mat-list-item routerLink="workingtimes" > Working times </button>
+      <button mat-list-item routerLink="teams" > Teams </button>
+    </mat-action-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+

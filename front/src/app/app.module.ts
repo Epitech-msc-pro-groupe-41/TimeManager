@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './material.module';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { HomeComponent } from './home/home.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {DashboardComponent, LoginComponent, NavbarComponent, RegisterComponent} from './_components';
+import { WorkingtimesComponent } from './_components/workingtimes/workingtimes.component';
+import { TeamsComponent } from './_components/teams/teams.component';
+import { ClockmanagerComponent } from './_components/clockmanager/clockmanager.component';
+import { ProfilComponent } from './_components/profil/profil.component';
 
 
 @NgModule({
@@ -30,7 +32,12 @@ import {HttpClientModule} from '@angular/common/http';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent,
+    DashboardComponent,
+    NavbarComponent,
+    WorkingtimesComponent,
+    TeamsComponent,
+    ClockmanagerComponent,
+    ProfilComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

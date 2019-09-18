@@ -1,0 +1,16 @@
+<div class="top-navbar" fxLayout="row" fxLayoutAlign="space-between">
+  <button  mat-button style="color: white" (click)="userSevice.toggleSideNav()">
+    <mat-icon>timer</mat-icon>
+    Time Manager
+  </button>
+
+  <button style="color: white" mat-button [matMenuTriggerFor]="menu">
+    {{currentUser.email}}
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+</div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item routerLink="profil">Profile</button>
+  <button mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>

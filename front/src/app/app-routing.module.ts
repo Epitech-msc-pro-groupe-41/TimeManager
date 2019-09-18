@@ -1,18 +1,28 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {LoginComponent} from './login/login.component';
-import {RegisterComponent} from './register/register.component';
-import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './_helpers';
+import {
+  ClockmanagerComponent,
+  DashboardComponent,
+  LoginComponent, ProfilComponent,
+  RegisterComponent,
+  TeamsComponent,
+  WorkingtimesComponent
+} from './_components';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
 
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'clockmanager', component: ClockmanagerComponent, canActivate: [AuthGuard]},
+  { path: 'workingtimes', component: WorkingtimesComponent, canActivate: [AuthGuard]},
+  { path: 'teams', component: TeamsComponent, canActivate: [AuthGuard]},
+  { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard]},
+
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 @NgModule({

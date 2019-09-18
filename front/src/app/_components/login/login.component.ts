@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../_services';
+import {UserService} from '../../_services';
 import {first} from 'rxjs/operators';
+import {error} from 'util';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,9 @@ export class LoginComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -50,16 +53,28 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.userService.login(this.f.email.value, this.f.username.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          console.log('login: ', data);
-          this.router.navigate([this.returnUrl]);
-        },
-        error => {
-          this.error = error;
-          this.loading = false;
-        });
+
+    this.userService.login(this.f.email.value, this.f.username.value).subscribe(response => {
+
+        if (response && response.userID) {
+
+          this.userService.getMe(response.userID)
+            .pipe(first())
+            .subscribe(
+              data => {
+                console.log('login: ', data);
+                this.router.navigate([this.returnUrl]);
+              },
+              err => {
+                this.error = err;
+                this.loading = false;
+              });
+        }
+      },
+      err => {
+        this.error = err;
+      }
+    );
+
   }
 }
