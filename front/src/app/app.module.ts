@@ -10,11 +10,17 @@ import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {DashboardComponent, LoginComponent, NavbarComponent, RegisterComponent} from './_components';
-import { WorkingtimesComponent } from './_components/workingtimes/workingtimes.component';
-import { TeamsComponent } from './_components/teams/teams.component';
-import { ClockmanagerComponent } from './_components/clockmanager/clockmanager.component';
-import { ProfilComponent } from './_components/profil/profil.component';
+import {
+  ClockmanagerComponent,
+  DashboardComponent,
+  LoginComponent,
+  NavbarComponent, ProfilComponent,
+  RegisterComponent,
+  TeamsComponent, UpdateWorkingtimeDialog,
+  WorkingtimesComponent
+} from './_components';
+import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
+import {ChartModule} from 'angular-highcharts';
 
 
 @NgModule({
@@ -27,6 +33,7 @@ import { ProfilComponent } from './_components/profil/profil.component';
     MaterialModule,
     FlexLayoutModule,
     FormsModule,
+    ChartModule,
   ],
   declarations: [
     AppComponent,
@@ -38,6 +45,12 @@ import { ProfilComponent } from './_components/profil/profil.component';
     TeamsComponent,
     ClockmanagerComponent,
     ProfilComponent,
+    UpdateWorkingtimeDialog,
+    DeleteWorkingtimeDialog,
+  ],
+  entryComponents: [
+    UpdateWorkingtimeDialog,
+    DeleteWorkingtimeDialog,
   ],
   providers: [],
   bootstrap: [AppComponent]

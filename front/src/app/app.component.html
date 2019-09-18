@@ -1,6 +1,18 @@
 <app-navbar *ngIf="userService.currentUserValue"></app-navbar>
 <mat-sidenav-container class="app-view">
   <mat-sidenav class="sidenav" mode="side" [opened]="userService.currentUserValue && userService.sidenavOpened">
+    <div style="text-align: center">
+      <h4>Clock</h4>
+      <div *ngIf="clockService.currentClock">
+        <h4>Time: {{clockService.currentClock.time || 'unset'}}</h4>
+        <h4 style="margin-top: 10px">Status: {{clockService.currentClock.status}}</h4>
+
+      </div>
+      <button style="margin: 10px 0" mat-raised-button (click)="clockService.getClock()"> Refresh</button>
+      <button style="margin: 10px 0" mat-raised-button (click)="clockService.clock()">
+        {{clockService.currentClock.status ? 'Stop Clock' : 'Start Clock'}}</button>
+    </div>
+    <mat-divider></mat-divider>
     <mat-action-list>
       <button mat-list-item routerLink="" > Dashboard  </button>
       <button mat-list-item routerLink="clockmanager" > Clock Manager </button>
