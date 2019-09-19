@@ -1,0 +1,22 @@
+<div style="text-align: center">
+  <h2>Dashboard</h2>
+  <mat-form-field>
+    <mat-label>Chart Type</mat-label>
+    <mat-select [(value)]="chartType">
+      <mat-option value="bar">bar</mat-option>
+      <mat-option value="line">Line</mat-option>
+      <mat-option value="horizontalBar">Horizontal Bar</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div style="display: block">
+    <canvas mdbChart
+            [chartType]="chartType"
+            [datasets]="chartDatasets"
+            [labels]="chartLabels"
+            [colors]="chartColors"
+            [options]="chartOptions">
+
+    </canvas>
+  </div>
+  <button mat-raised-button color="primary" (click)="refresh()">Refresh</button>
+</div>

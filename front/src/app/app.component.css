@@ -1,0 +1,9 @@
+.app-view {
+  height: calc(100vh - 60px);
+  margin-top: 60px; }
+
+.sidenav {
+  width: 200px;
+  background-color: lightgrey; }
+
+/*# sourceMappingURL=app.component.css.map */

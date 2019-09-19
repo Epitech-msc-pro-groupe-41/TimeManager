@@ -1,0 +1,27 @@
+<div class="register-container">
+  <h2>Register</h2>
+  <form fxLayout="column" fxLayoutAlign="center" class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="form-group">
+      <input matInput placeholder="Email" required formControlName="email" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+      <mat-error *ngIf="submitted && f.email.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">Email is required</div>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-group">
+      <input matInput placeholder="Username" required formControlName="username" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
+      <mat-error *ngIf="submitted && f.username.errors" class="invalid-feedback">
+        <div *ngIf="f.username.errors.required">Username is required</div>
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout="column" class="register-links">
+      <button style="margin-top: 10px;" [disabled]="registerForm.invalid" mat-raised-button type="submit" color="primary" >Register</button>
+      <button style="margin-top: 10px;" mat-stroked-button routerLink="/login" color="primary">Login</button>
+    </div>
+    <mat-spinner *ngIf="loading" style="margin: 20px auto auto auto"></mat-spinner>
+  </form>
+</div>
