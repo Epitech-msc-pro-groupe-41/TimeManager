@@ -15,6 +15,9 @@ import java.net.InetAddress;
 
 @Configuration
 @ComponentScan("com.timemanager")
+/**
+ * Config of the mongoDB
+ */
 public class MongoDBConfig {
 
     @Value("${mongodb.db.name}")
@@ -33,6 +36,9 @@ public class MongoDBConfig {
     private String dbHost;
 
     @Bean
+    /**
+     * Ini a mongoDB client and give the config data's to open a connection
+     */
     public MongoClient mongoClient() throws Exception {
         ServerAddress serverAddress = new ServerAddress(dbHost, dbPort);
         /*MongoCredential credential = MongoCredential.createScramSha1Credential(
@@ -47,6 +53,9 @@ public class MongoDBConfig {
     }
 
     @Bean
+    /**
+     * Init mongo template for implement all request (find(), get(), create(), delete(), ...)
+     */
     public MongoTemplate mongoTemplate() throws Exception {
         MongoTemplate mongoTemplate = new MongoTemplate(mongoClient(),dbName);
         return mongoTemplate;

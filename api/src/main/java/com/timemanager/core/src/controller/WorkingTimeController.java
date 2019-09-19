@@ -1,10 +1,15 @@
 package com.timemanager.core.src.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.timemanager.core.src.dto.CreateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.UpdateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.WorkingTimeResponseDto;
+import com.timemanager.core.src.service.TokenService;
 import com.timemanager.core.src.service.WorkingTimeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,53 +31,55 @@ public class WorkingTimeController {
 
     @Autowired
     WorkingTimeService workingTimeService;
-    
-    @ApiOperation(value = "Get all working time of a user filter by start and end time" )
+
+    @Autowired
+    TokenService tokenService;
+
+    @ApiOperation(value = "Get all working time of a user filter by start and end time")
     @RequestMapping(method = RequestMethod.GET, value = "filter/{userID}")
-    public List<WorkingTimeResponseDto> getWorkingTimes(
-        @PathVariable(name = "userID", required = true) String userID,
-        @RequestParam(name = "start", required = true) String start,
-        @RequestParam(name = "end", required = true) String end) {
-        
+    public List<WorkingTimeResponseDto> getWorkingTimes(@PathVariable(name = "userID", required = true) String userID,
+            @RequestParam(name = "start", required = true) long start,
+            @RequestParam(name = "end", required = true) long end) {
+
         return workingTimeService.getWorkingTimes(userID, start, end);
     }
 
-    @ApiOperation(value = "Get all working time by userID" )
+    @ApiOperation(value = "Get all working time by userID")
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
-    public List<WorkingTimeResponseDto> getAllWorkingTimes(
-        @PathVariable(name = "userID", required = true) String userID) {        
+    public List<WorkingTimeResponseDto> getAllWorkingTimes(HttpServletRequest request, HttpServletResponse res,
+            @PathVariable(name = "userID", required = true) String userID) throws IOException {
+
+        if (!tokenService.isTokenValid(request.getAttribute("userID").toString(),
+                request.getAttribute("token").toString())) {
+            res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
         return workingTimeService.getAllWorkingTimes(userID);
     }
 
-
     @ApiOperation(value = "Get working time by userID and workingtimeID")
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}/{workingtimeID}")
-    public WorkingTimeResponseDto getWorkingTime(
-        @PathVariable(name = "userID", required = true) String userID,
-        @PathVariable(name = "workingtimeID", required = true) String workingtimeID) {
+    public WorkingTimeResponseDto getWorkingTime(@PathVariable(name = "userID", required = true) String userID,
+            @PathVariable(name = "workingtimeID", required = true) String workingtimeID) {
         return workingTimeService.getWorkingTime(userID, workingtimeID);
     }
 
     @ApiOperation(value = "Create a new working time")
     @RequestMapping(method = RequestMethod.POST, value = "/{userID}")
-    public void createWorkingTime(
-        @PathVariable(name = "userID", required = true) String userID,
-        @RequestBody CreateWorkingTimeRequestDto in ) {
-            workingTimeService.createWorkingTime(userID, in);
+    public void createWorkingTime(@PathVariable(name = "userID", required = true) String userID,
+            @RequestBody CreateWorkingTimeRequestDto in) {
+        workingTimeService.createWorkingTime(userID, in);
     }
 
     @ApiOperation(value = "Update working time")
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public void updateWorkingTime(
-        @PathVariable(name = "id", required = true) String id,
-        @RequestBody UpdateWorkingTimeRequestDto workingTime ) {
-            workingTimeService.updateWorkingTime(id, workingTime);
+    public void updateWorkingTime(@PathVariable(name = "id", required = true) String id,
+            @RequestBody UpdateWorkingTimeRequestDto workingTime) {
+        workingTimeService.updateWorkingTime(id, workingTime);
     }
 
     @ApiOperation(value = "Delete working time")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void deleteWorkingTime(
-        @PathVariable(name = "id", required = true) String id) {
-            workingTimeService.deleteWorkingTime(id);
+    public void deleteWorkingTime(@PathVariable(name = "id", required = true) String id) {
+        workingTimeService.deleteWorkingTime(id);
     }
 }

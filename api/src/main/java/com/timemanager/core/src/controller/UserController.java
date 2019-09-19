@@ -31,7 +31,7 @@ public class UserController {
     public User getUser(
         @PathVariable("userID") String userID) {
 
-        return userService.getUserById(userID);
+        return userService.getUserById(userID, true);
     }
 
     @ApiOperation(value = "Get all user with them informations")

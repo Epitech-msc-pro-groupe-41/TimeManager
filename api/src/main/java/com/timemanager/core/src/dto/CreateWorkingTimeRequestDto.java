@@ -2,23 +2,31 @@ package com.timemanager.core.src.dto;
 
 public class CreateWorkingTimeRequestDto {
     
-    String start;
+    long start;
 
-    String end;
+    long end;
 
-    public String getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(long end) {
+        this.end = end;
+    }
+
+    public CreateWorkingTimeRequestDto() {
+    }
+
+    public CreateWorkingTimeRequestDto(long start, long end) {
+        this.start = start;
         this.end = end;
     }
 

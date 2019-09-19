@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "timemanager_teammembers")
+/**
+ * TeamMember model, fields of table timemanager_teammembers in mongoDB
+ */
 public class TeamMember {
 
     @Id

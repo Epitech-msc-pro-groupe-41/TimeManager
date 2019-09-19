@@ -1,12 +1,12 @@
 package com.timemanager.core.src.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import com.timemanager.core.src.dto.ClockResponseDto;
+import com.timemanager.core.src.dto.CreateWorkingTimeRequestDto;
 import com.timemanager.core.src.model.Clock;
+import com.timemanager.core.src.model.WorkingTime;
 import com.timemanager.core.src.repository.ClockRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,10 @@ public class ClockService {
     ClockRepository clockRepository;
 
     @Autowired
-    UserService userService;
+    WorkingTimeService workingTimeService;
 
-    public String dateLongToString(long dateTime) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(dateTime);
-        return formatter.format(date);
-    }
+    @Autowired
+    UserService userService;
 
     public ClockResponseDto getClock(String userID, boolean trigger) {
         List<Clock> clocks= null;
@@ -38,9 +35,9 @@ public class ClockService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, "Invalid parameters");     
         } else {
-            if (userService.getUserById(userID) != null) {
+            if (userService.getUserById(userID, true) != null) {
                 Query query = new Query();
-                query.addCriteria(Criteria.where("userId").is(userID).and("status").is(true));            
+                query.addCriteria(Criteria.where("userID").is(userID).and("status").is(true));            
                 clocks = clockRepository.find(query);
             }
             if (clocks == null) {
@@ -58,7 +55,7 @@ public class ClockService {
                 res = new ClockResponseDto();
                 res.setClockID(clock.getClockID());
                 res.setStatus(clock.isStatus());
-                res.setTime(dateLongToString(clock.getTime()));
+                res.setTime(clock.getTime());
                 res.setUserID(clock.getUserID());
     
             }
@@ -78,23 +75,33 @@ public class ClockService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, "Invalid parameters");     
         } else {
-            if (userService.getUserById(userID) != null) {
+            if (userService.getUserById(userID, true) != null) {
+                long time = System.currentTimeMillis();
+
                 ClockResponseDto clock = getClock(userID, false);
                 if (clock == null) {
-                    response =  new Clock();
+                    /** Create new clock if not exist so it's a clock in */
+                    response = new Clock();
                     response.setClockID("CLK" + UUID.randomUUID().toString());
                     response.setStatus(true);
-                    response.setTime(System.currentTimeMillis());
+                    response.setTime(time);
                     response.setUserID(userID);    
+                    String workingTimeID = workingTimeService.createWorkingTime(userID, new CreateWorkingTimeRequestDto(time, -1));
+                    response.setWorkingTimeID(workingTimeID);
+                    clockRepository.create(response);
                 } else {
+                    /** Clock already exist so it's a clock out */
                     Query query = new Query();
-                    query.addCriteria(Criteria.where("clockID").is(clock.getClockID()).and("userId").is(clock.getUserID()));            
+                    query.addCriteria(Criteria.where("clockID").is(clock.getClockID()).and("userID").is(clock.getUserID()));            
                     List<Clock> existClock = clockRepository.find(query);   
-                    if (existClock != null && existClock.size() > 0) 
+                    if (existClock != null && existClock.size() > 0)
                         response = existClock.get(0);
                     response.setStatus(false);
+                    WorkingTime workingTime = workingTimeService.getUniqueWorkingTime(userID, response.getWorkingTimeID());
+                    workingTime.setEnd(time);
+                    workingTimeService.updateWorkingTime(workingTime);
+                    clockRepository.update(response);
                 }
-                clockRepository.create(response);
             }
         }
         return response;

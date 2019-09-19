@@ -4,11 +4,11 @@ public class WorkingTimeResponseDto {
 
     String workingTimeID;
 
-    String start;
+    long start;
 
-    String end;
+    long end;
 
-    String userId;
+    String userID;
 
     public String getWorkingTimeID() {
         return workingTimeID;
@@ -18,27 +18,28 @@ public class WorkingTimeResponseDto {
         this.workingTimeID = workingTimeID;
     }
 
-    public String getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
+
 }

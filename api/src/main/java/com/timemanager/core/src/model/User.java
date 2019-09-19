@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "timemanager_users")
+/**
+ * User model, fields of table timemanager_users in mongoDB
+ */
 public class User {
 
     @Id
@@ -20,6 +23,8 @@ public class User {
 
     @NotNull(message = "LastName must not be null")
     private String lastName;
+
+    private String token;
 
     @NotNull(message = "User's mail must not be null")
     private String email;
@@ -84,5 +89,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

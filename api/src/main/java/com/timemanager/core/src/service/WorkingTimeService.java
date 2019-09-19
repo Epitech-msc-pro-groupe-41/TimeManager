@@ -1,10 +1,10 @@
 package com.timemanager.core.src.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.CreateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.UpdateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.WorkingTimeResponseDto;
@@ -27,31 +27,14 @@ public class WorkingTimeService {
     @Autowired
     UserService userService;
 
-    public String dateLongToString(long dateTime) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(dateTime);
-        return formatter.format(date);
-    }
-
-    public long stringToLongDate(String date) {
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long dateLong = 0;
-        try {
-            dateLong = formatter.parse(date).getTime();
-        } catch (Exception e) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
-        }
-        return dateLong;
-    }
-
-    public void createWorkingTime(String userID, CreateWorkingTimeRequestDto in) {
+    public String createWorkingTime(String userID, CreateWorkingTimeRequestDto in) {
         WorkingTime workingTime = new WorkingTime();
-        workingTime.setStart(stringToLongDate(in.getStart()));
-        workingTime.setEnd(stringToLongDate(in.getEnd()));
+        workingTime.setStart(in.getStart());
+        workingTime.setEnd(in.getEnd());
         workingTime.setUserID(userID);
         workingTime.setWorkingTimeID("WT" + UUID.randomUUID().toString());
         workingTimeRepository.create(workingTime);
+        return workingTime.getWorkingTimeID();
     }
 
     public List<WorkingTimeResponseDto> getAllWorkingTimes(String userID) {
@@ -64,14 +47,14 @@ public class WorkingTimeService {
         } else {
 
             Query query = new Query();
-            query.addCriteria(new Criteria().andOperator(Criteria.where("userId").is(userID)));
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)));
             workingTimes = workingTimeRepository.find(query);
             if (workingTimes != null) {
                 for (WorkingTime workingTime : workingTimes) {
                     WorkingTimeResponseDto data = new WorkingTimeResponseDto();
-                    data.setEnd(dateLongToString(workingTime.getEnd()));
-                    data.setStart(dateLongToString(workingTime.getStart()));
-                    data.setUserId(workingTime.getUserID());
+                    data.setEnd(workingTime.getEnd());
+                    data.setStart(workingTime.getStart());
+                    data.setUserID(workingTime.getUserID());
                     data.setWorkingTimeID(workingTime.getWorkingTimeID());
                     response.add(data);
                 }
@@ -85,7 +68,7 @@ public class WorkingTimeService {
     }
 
 
-    public List<WorkingTimeResponseDto> getWorkingTimes(String userID, String start, String end){
+    public List<WorkingTimeResponseDto> getWorkingTimes(String userID, long start, long end){
         List<WorkingTime> workingTimes = null;
         List<WorkingTimeResponseDto> response = new ArrayList<>();
 
@@ -93,19 +76,17 @@ public class WorkingTimeService {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, "Invalid parameters");  
         } else {
-            long startDate = stringToLongDate(start);
-            long endDate = stringToLongDate(end);
 
             Query query = new Query();
-            query.addCriteria(new Criteria().andOperator(Criteria.where("userId").is(userID)).orOperator(Criteria.where("start").is(startDate),
-            Criteria.where("end").is(endDate)));
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)).orOperator(Criteria.where("start").is(start),
+            Criteria.where("end").is(end)));
              workingTimes = workingTimeRepository.find(query);
              if (workingTimes != null) {
                 for (WorkingTime workingTime : workingTimes) {
                     WorkingTimeResponseDto data = new WorkingTimeResponseDto();
-                    data.setEnd(dateLongToString(workingTime.getEnd()));
-                    data.setStart(dateLongToString(workingTime.getStart()));
-                    data.setUserId(workingTime.getUserID());
+                    data.setEnd(workingTime.getEnd());
+                    data.setStart(workingTime.getStart());
+                    data.setUserID(workingTime.getUserID());
                     data.setWorkingTimeID(workingTime.getWorkingTimeID());
                     response.add(data);
                 }
@@ -119,27 +100,34 @@ public class WorkingTimeService {
     }
 
     public WorkingTimeResponseDto getWorkingTime(String userID, String workingTimeID) {
-        List<WorkingTime> workingTime = null;
+        WorkingTime workingTime = getUniqueWorkingTime(userID, workingTimeID);
         WorkingTimeResponseDto response = new WorkingTimeResponseDto();
+        if (workingTime != null) {
+            response.setEnd(workingTime.getEnd());
+            response.setStart(workingTime.getStart());
+            response.setUserID(workingTime.getUserID());
+            response.setWorkingTimeID(workingTime.getWorkingTimeID());
+        }
+        return response;
+    }
+
+    public WorkingTime getUniqueWorkingTime(String userID, String workingTimeID) {
+        List<WorkingTime> workingTimes = null;
 
         if (userID.isEmpty() || workingTimeID.isEmpty()) {
             throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN, "Invalid parameters");  
         } else {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(userID).and("workingTimeID").is(workingTimeID));
-            workingTime = workingTimeRepository.find(query);
-            if (workingTime != null) {
-                response.setEnd(dateLongToString(workingTime.get(0).getEnd()));
-                response.setStart(dateLongToString(workingTime.get(0).getStart()));
-                response.setUserId(workingTime.get(0).getUserID());
-                response.setWorkingTimeID(workingTime.get(0).getWorkingTimeID());
+            query.addCriteria(Criteria.where("userID").is(userID).and("workingTimeID").is(workingTimeID));
+            workingTimes = workingTimeRepository.find(query);
+            if (workingTimes != null && workingTimes.size() > 0) {
+                return workingTimes.get(0);
             } else {
                 throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "No working time found"); 
             }
         }
-        return response;
     }
 
     public void updateWorkingTime(String id, UpdateWorkingTimeRequestDto in) {
@@ -148,18 +136,22 @@ public class WorkingTimeService {
                 HttpStatus.FORBIDDEN, "Invalid parameters");  
         } else {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userId").is(in.getUserID()).and("workingTimeID").is(id));
+            query.addCriteria(Criteria.where("userID").is(in.getUserID()).and("workingTimeID").is(id));
             List<WorkingTime> workingTimes = workingTimeRepository.find(query);
             if (workingTimes != null) {
                 WorkingTime workingTime = workingTimes.get(0);
-                workingTime.setEnd(stringToLongDate(in.getEnd()));
-                workingTime.setStart(stringToLongDate(in.getStart()));
+                workingTime.setEnd(in.getEnd());
+                workingTime.setStart(in.getStart());
                 workingTimeRepository.update(workingTime);
             }  else {
                 throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "No working time found"); 
             }          
         }
+    }
+
+    public void updateWorkingTime(WorkingTime workingTime) {
+        workingTimeRepository.update(workingTime);
     }
 
     public void deleteWorkingTime(String id) {

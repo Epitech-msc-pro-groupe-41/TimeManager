@@ -4,7 +4,7 @@ public class ClockResponseDto {
 
     String clockID;
 
-    String time;
+    long time;
 
     Boolean status;
 
@@ -18,11 +18,11 @@ public class ClockResponseDto {
         this.clockID = clockID;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

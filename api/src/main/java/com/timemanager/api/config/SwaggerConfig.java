@@ -16,12 +16,18 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+/**
+ * Config for swagger documentation : http://localhost:4000/rest/swagger-ui.html#/
+ */
 public class SwaggerConfig {
 
     @Autowired
     private Environment env;
 
     @Bean
+    /**
+     * Init where to check folder for routes
+     */
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
@@ -32,6 +38,9 @@ public class SwaggerConfig {
                 .build();
     }
 
+    /**
+     * Init swagger data infos and contact infos
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder() .title(env.getProperty("swagger.info.title"))
                                     .description(env.getProperty("swagger.info.desc"))

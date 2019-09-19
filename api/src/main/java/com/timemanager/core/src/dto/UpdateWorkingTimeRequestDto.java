@@ -2,25 +2,25 @@ package com.timemanager.core.src.dto;
 
 public class UpdateWorkingTimeRequestDto {
     
-    String start;
+    long start;
 
-    String end;
+    long end;
 
     String userID;
 
-    public String getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 

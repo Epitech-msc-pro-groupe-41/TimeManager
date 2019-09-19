@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "timemanager_clocks")
+/**
+ * Clock model, fields of table timemanager_clocks in mongoDB
+ */
 public class Clock {
 
     @Id
@@ -23,6 +26,9 @@ public class Clock {
 
     @NotNull(message = "UserID must not be null")
     private String userID;
+
+    @NotNull(message = "Working time must not be null")
+    private String workingTimeID;
 
     public String getId() {
         return id;
@@ -62,5 +68,13 @@ public class Clock {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getWorkingTimeID() {
+        return workingTimeID;
+    }
+
+    public void setWorkingTimeID(String workingTimeID) {
+        this.workingTimeID = workingTimeID;
     }
 }

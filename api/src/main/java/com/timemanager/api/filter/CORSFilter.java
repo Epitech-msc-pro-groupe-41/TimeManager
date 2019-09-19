@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+/**
+ * Config for set CORS
+ */
 public class CORSFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CORSFilter.class);
@@ -29,6 +32,9 @@ public class CORSFilter implements Filter {
     }
 
     @Override
+    /**
+     * Setup allowed cors origins, headers and methods.
+     */
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) req;
