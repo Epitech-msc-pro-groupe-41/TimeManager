@@ -1,0 +1,13 @@
+<div class="profil-view">
+  <h3>Profil</h3>
+  <form class="profil-form" fxLayout="column" (ngSubmit)="onSubmit()">
+    <mat-form-field class="">
+      <input name="email" matInput placeholder=Email [(ngModel)]="email">
+    </mat-form-field>
+    <mat-form-field class="">
+      <input name="username" matInput placeholder="Username" [(ngModel)]="username">
+    </mat-form-field>
+    <button type="submit" [disabled]="!isFormValid()" style="margin-top: 10px" mat-raised-button color="primary"> Update profil</button>
+    <mat-spinner *ngIf="loading" style="margin: 20px auto auto auto;"></mat-spinner>
+  </form>
+</div>

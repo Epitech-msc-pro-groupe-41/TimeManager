@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,QAAS;EACP,MAAM,EAAE,MAAM",
+"sources": ["workingtimes.component.scss"],
+"names": [],
+"file": "workingtimes.component.css"
+}

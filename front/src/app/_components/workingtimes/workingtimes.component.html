@@ -1,0 +1,20 @@
+<div style="text-align: center; margin: 0 15%" fxLayout="column">
+  <h3>Working Times</h3>
+
+  <mat-card class="wt-card" *ngFor="let item of wtService.workingTimes">
+    <p>Start: {{item.start}}</p>
+    <p>End: {{item.end}}</p>
+    <button mat-icon-button (click)="openUpdateWtDialog(item)">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="openDeleteDialog(item)">
+      <mat-icon color="warn">delete</mat-icon>
+    </button>
+  </mat-card>
+
+  <button style="margin: 10px 0" mat-stroked-button color="primary" (click)="wtService.getWorkingTimes()"> Refresh
+  </button>
+  <button style="margin: 10px 0" mat-raised-button color="primary" (click)="openCreateWtDialog()"> Create Working time
+  </button>
+</div>
+
