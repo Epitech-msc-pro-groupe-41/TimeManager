@@ -6,6 +6,13 @@ import {environment} from '../../environments/environment';
 import {User} from '../_models';
 import {Router} from '@angular/router';
 
+export interface RegisterParams {
+  email: string;
+  lastName: string;
+  firstName: string;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,12 +34,17 @@ export class UserService {
     return this.currentUserSubject.value;
   }
 
-  login(email, username) {
-    return this.http.get<any>(environment.apiUrl + '/users?email=' + email + '&username=' + username);
+  login(email, password) {
+    return this.http.post<any>(environment.apiUrl + 'auth/signIn', {email, password});
   }
 
-  register(email, username) {
-    return this.http.post<any>(environment.apiUrl + '/users', { email, username});
+  register(params: RegisterParams) {
+    return this.http.post<any>(environment.apiUrl + 'auth/signUp', {
+      email: params.email,
+      firstName: params.firstName,
+      lastName: params.lastName,
+      password: params.password,
+    });
   }
 
   refreshUser() {
@@ -44,7 +56,7 @@ export class UserService {
   }
 
   getMe(userID: string) {
-    return this.http.get<User>(environment.apiUrl + '/users/' + userID)
+    return this.http.get<User>(environment.apiUrl + 'users/' + userID)
       .pipe(map(user => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -54,7 +66,7 @@ export class UserService {
   }
 
   updateUser(email, username) {
-    return this.http.put<any>(environment.apiUrl + '/users/' + this.currentUserValue.userID, {
+    return this.http.put<any>(environment.apiUrl + 'users/' + this.currentUserValue.userID, {
       email,
       username,
       id: this.currentUserValue.id,
@@ -63,12 +75,13 @@ export class UserService {
   }
 
   deleteUser() {
-    return this.http.delete<any>(environment.apiUrl + '/users/' + this.currentUserValue.userID);
+    return this.http.delete<any>(environment.apiUrl + 'users/' + this.currentUserValue.userID);
   }
 
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('user-token');
     this.currentUserSubject.next(null);
   }
 }

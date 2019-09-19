@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  api:
+    build: ./api
+    image: time_manager_api
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    networks:
+      - back-tier
+      - front-tier
+  front:
+    build: ./front
+    image: time_manager_front
+    restart: always
+    depends_on:
+      - api
+    networks:
+      - front-tier
+    ports:
+      - "8080:8080"
+  mongo:
+    container_name: time_manager_mongo
+    image: "mongo"
+    #command: --auth
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - back-tier
+    volumes:
+      - db-data:/var/lib/mongodb_timemanager/data
+
+networks:
+  back-tier:
+  front-tier:
+
+volumes:
+  db-data:
