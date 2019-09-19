@@ -3,6 +3,7 @@ package com.timemanager.core.src.controller;
 import java.util.List;
 
 import com.timemanager.core.src.dto.UserResponseDto;
+import com.timemanager.core.src.dto.UserUpdateRequestDto;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.model.User;
 import com.timemanager.core.src.service.UserService;
@@ -28,17 +29,17 @@ public class UserController {
 
     @ApiOperation(value = "Get user by userID")
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
-    public User getUser(
+    public UserResponseDto getUser(
         @PathVariable("userID") String userID) {
 
-        return userService.getUserById(userID, true);
+        return userService.convertToResponseDto(userService.getUserById(userID, true));
     }
 
     @ApiOperation(value = "Get all user with them informations")
     @RequestMapping(method = RequestMethod.GET, value = "/all")
-    public List<User> getAllUsers() {
+    public List<UserResponseDto> getAllUsers() {
 
-        return userService.getAllUsers();
+        return userService.convertToListResponseDto(userService.getAllUsers());
     }
 
     @ApiOperation(value = "Create a new user")
@@ -51,7 +52,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{userID}")
     public void updateUser(
         @PathVariable(name = "userID", required = true) String userID,
-        @RequestBody User user ) {
+        @RequestBody UserUpdateRequestDto user ) {
             userService.updateUser(userID, user);
     }
 
