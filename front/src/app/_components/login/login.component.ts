@@ -26,13 +26,15 @@ export class LoginComponent implements OnInit {
     // redirect to home if already logged in
     if (this.userService.currentUserValue) {
       this.router.navigate(['/']);
+    } else {
+      this.userService.logout();
     }
   }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['', Validators.required],
+      password: ['', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
@@ -54,15 +56,15 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
 
-    this.userService.login(this.f.email.value, this.f.username.value).subscribe(response => {
+    this.userService.login(this.f.email.value, this.f.password.value).subscribe(response => {
 
         if (response && response.userID) {
-
+          localStorage.setItem('user-token', response.token);
           this.userService.getMe(response.userID)
             .pipe(first())
             .subscribe(
               data => {
-                console.log('login: ', data);
+                this.loading = false;
                 this.router.navigate([this.returnUrl]);
               },
               err => {

@@ -20,7 +20,6 @@ export class ProfilComponent implements OnInit {
   ) {
     this.userSubscription = this.userService.currentUser.subscribe(user => {
       this.email = user.email;
-      this.username = user.username;
     });
   }
 
@@ -30,8 +29,7 @@ export class ProfilComponent implements OnInit {
   isFormValid() {
     return this.email
       && this.username
-      && (this.email !== this.userService.currentUserValue.email
-      || this.username !== this.userService.currentUserValue.username);
+      && (this.email !== this.userService.currentUserValue.email);
   }
 
   onSubmit() {

@@ -9,7 +9,7 @@ import { MaterialModule } from './material.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {
   DashboardComponent,
   LoginComponent,
@@ -21,6 +21,8 @@ import {
 import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
 
 import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
+import {JwtInterceptor} from './_helpers/jwt.interceptor';
+import {ErrorInterceptor} from './_helpers';
 
 @NgModule({
   imports: [
@@ -51,7 +53,10 @@ import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
     UpdateWorkingtimeDialog,
     DeleteWorkingtimeDialog,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

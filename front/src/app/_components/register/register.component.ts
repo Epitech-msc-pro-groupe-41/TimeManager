@@ -25,13 +25,18 @@ export class RegisterComponent implements OnInit {
     // redirect to home if already logged in
     if (this.userService.currentUserValue) {
       this.router.navigate(['/']);
+    } else {
+      this.userService.logout();
     }
   }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmedPassword: ['', Validators.required]
     });
 
     // get return url from route parameters or default to '/'
@@ -47,12 +52,17 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
 
     // stop here if form is invalid
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid && this.f.password.value !== this.f.confirmedPAssword.value) {
       return;
     }
 
     this.loading = true;
-    this.userService.register(this.f.email.value, this.f.username.value)
+    this.userService.register({
+      email: this.f.email.value,
+      firstName: this.f.firstName.value,
+      lastName: this.f.lastName.value,
+      password: this.f.password.value,
+    })
       .subscribe(response => {
 
           if (response && response.userID) {
@@ -61,7 +71,7 @@ export class RegisterComponent implements OnInit {
               .pipe(first())
               .subscribe(
                 data => {
-                  console.log('register: ', data);
+                  this.loading = false;
                   this.router.navigate([this.returnUrl]);
                 },
                 err => {
@@ -72,6 +82,7 @@ export class RegisterComponent implements OnInit {
         },
         err => {
           this.error = err;
+          this.loading = false;
         }
       );
   }

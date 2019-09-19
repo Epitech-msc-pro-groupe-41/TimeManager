@@ -11,10 +11,10 @@
     </mat-form-field>
 
     <mat-form-field class="form-group">
-      <input matInput placeholder="Username" required formControlName="username" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
-      <mat-error *ngIf="submitted && f.username.errors" class="invalid-feedback">
-        <div *ngIf="f.username.errors.required">Username is required</div>
+      <input type="password" matInput placeholder="Password" required formControlName="password" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+      <mat-error *ngIf="submitted && f.password.errors" class="invalid-feedback">
+        <div *ngIf="f.password.errors.required">Password is required</div>
       </mat-error>
     </mat-form-field>
 
