@@ -1,5 +1,6 @@
 package com.timemanager.core.src.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -9,6 +10,7 @@ import com.timemanager.core.src.constant.UserType;
 import com.timemanager.core.src.dto.AuthResponseDto;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.dto.UserResponseDto;
+import com.timemanager.core.src.dto.UserUpdateRequestDto;
 import com.timemanager.core.src.model.User;
 import com.timemanager.core.src.repository.UserRepository;
 
@@ -80,7 +82,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void updateUser(String userID, User in) {
+    public void updateUser(String userID, UserUpdateRequestDto in) {
         Matcher matcher = pattern.matcher(in.getEmail());
         User user = getUserById(userID, true);
 
@@ -91,8 +93,6 @@ public class UserService {
             user.setEmail(in.getEmail());
             user.setFirstName(in.getFirstName());
             user.setLastName(in.getLastName());
-            //user.setType(in.getType());
-            //user.setPassword(in.getPassword());
             userRepository.update(user);
         }
     }
@@ -136,4 +136,30 @@ public class UserService {
             userRepository.delete(user);
         }
     }
+
+    public List<UserResponseDto> convertToListResponseDto(List<User> users) {
+        List<UserResponseDto> response = new ArrayList<>();
+
+        if (users != null) {
+            for (User user : users) {
+                response.add(convertToResponseDto(user));
+            }    
+        }
+
+        return response;
+    }
+
+	public UserResponseDto convertToResponseDto(User user) {
+        UserResponseDto response = new UserResponseDto();
+
+        if (user != null) {
+            response.setEmail(user.getEmail());
+            response.setFirstName(user.getFirstName());
+            response.setLastName(user.getLastName());
+            response.setType(UserType.valueOf(user.getType()));
+            response.setUserID(user.getUserID());
+        }
+
+        return response;    
+	}
 }
