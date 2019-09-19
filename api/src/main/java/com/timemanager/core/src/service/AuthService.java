@@ -30,11 +30,12 @@ public class AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
-    public UserResponseDto signUp(RegisterRequestDto in) {
+    public AuthResponseDto signUp(RegisterRequestDto in) {
 
         if (in.getPassword() != null && !in.getPassword().isEmpty()) {
-            return userService.createUser(new UserRequestDto(in.getEmail(), in.getFirstName(), in.getLastName(),
-            passwordEncoder.encode(in.getPassword()), UserType.Employee));    
+            userService.createUser(new UserRequestDto(in.getEmail(), in.getFirstName(), in.getLastName(),
+            passwordEncoder.encode(in.getPassword()), UserType.Employee));  
+            return signIn(new LoginRequestDto(in.getEmail(), in.getPassword()));
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Password cannot be empty");
         }
@@ -43,7 +44,7 @@ public class AuthService {
     public AuthResponseDto signIn(LoginRequestDto in) {
         User user = userService.getUserByEmail(in.getEmail(), true);
         if (passwordEncoder.matches(in.getPassword(), user.getPassword())) {
-            String token = tokenService.createToken(user.getUserID());
+            String token = tokenService.createToken(user.getUserID(), user.getType());
             user.setToken(token);
             userService.updateUser(user);
             return new AuthResponseDto(token, user.getUserID(), UserType.valueOf(user.getType()));

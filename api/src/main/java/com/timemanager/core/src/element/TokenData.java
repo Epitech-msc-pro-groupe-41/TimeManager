@@ -9,14 +9,17 @@ public class TokenData {
 
     String xsrfToken;
 
+    String role;
+
     long expireDate;
 
     public TokenData() {}
 
-    public TokenData(String userID, String xsrfToken, long expireDate) {
+    public TokenData(String userID, String xsrfToken, long expireDate, String role) {
         this.userID = userID;
         this.xsrfToken = xsrfToken;
         this.expireDate = expireDate;
+        this.role = role;
     }
 
     public String getUserID() {
@@ -41,5 +44,13 @@ public class TokenData {
 
     public void setExpireDate(long expireDate) {
         this.expireDate = expireDate;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -35,7 +35,7 @@ public class AuthController {
 
     @ApiOperation(value = "Register a new user")
     @RequestMapping(method = RequestMethod.POST, value = "/signUp")
-    public UserResponseDto signUp(@RequestBody RegisterRequestDto in) {
+    public AuthResponseDto signUp(@RequestBody RegisterRequestDto in) {
 
         return authService.signUp(in);
     }

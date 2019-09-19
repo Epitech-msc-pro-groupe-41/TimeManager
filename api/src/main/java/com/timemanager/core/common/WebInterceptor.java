@@ -29,7 +29,7 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        if (!tokenService.isTokenValid(req.getAttribute("userID").toString(), req.getAttribute("token").toString())) {
+        if (!tokenService.isTokenValid(req.getAttribute("userID").toString(), req.getAttribute("token").toString(), req.getAttribute("role").toString())) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized Error");
             return false;
         }

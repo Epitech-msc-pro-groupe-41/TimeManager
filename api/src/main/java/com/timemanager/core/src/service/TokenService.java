@@ -11,6 +11,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.timemanager.core.src.constant.UserType;
 import com.timemanager.core.src.element.TokenData;
 import com.timemanager.core.src.model.User;
 
@@ -31,15 +32,15 @@ public class TokenService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenService.class);
 
-    public String createToken(String userID) {
+    public String createToken(String userID, String userType) {
         try {
             String xsrf_token = generateRandomString(50);
             Algorithm algorithm = Algorithm.HMAC256(SECRET_TOKEN);
             Calendar c = new GregorianCalendar();
             c.add(Calendar.DATE, 30);
 
-            String token = JWT.create().withClaim("c-xsrf-token", xsrf_token).withSubject(userID)
-                    .withExpiresAt(c.getTime()).sign(algorithm);
+            String token = JWT.create().withClaim("c-xsrf-token", xsrf_token).withClaim("role", userType)
+                    .withSubject(userID).withExpiresAt(c.getTime()).sign(algorithm);
 
             return token;
 
@@ -58,8 +59,10 @@ public class TokenService {
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
 
+            String value = jwt.getClaim("role").asString();
+
             return new TokenData(jwt.getSubject(), jwt.getClaim("c-xsrf-token").asString(),
-                    jwt.getExpiresAt().getTime());
+                    jwt.getExpiresAt().getTime(), jwt.getClaim("role").asString());
         } catch (UnsupportedEncodingException exception) {
             LOGGER.info("UnsupportedEncodingException in AuthService :", exception.getMessage());
             // throw new ResponseStatusException(
@@ -78,11 +81,11 @@ public class TokenService {
         if (tokenData == null)
             return false;
 
-        return tokenData.getUserID() != null && tokenData.getXsrfToken() != null
+        return tokenData.getRole() != null && tokenData.getUserID() != null && tokenData.getXsrfToken() != null
                 && tokenData.getExpireDate() > Calendar.getInstance().getTimeInMillis();
     }
 
-    public boolean isTokenValid(String userID, String xsrf_token) {
+    public boolean isTokenValid(String userID, String xsrf_token, String role) {
         User user = userService.getUserById(userID, false);
         if (user == null || user.getToken() == null)
             return false;
@@ -91,6 +94,11 @@ public class TokenService {
             return false;
         if (!tokenData.getXsrfToken().equals(xsrf_token))
             return false;
+        try {
+            UserType.valueOf(role);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         return true;
     }
 

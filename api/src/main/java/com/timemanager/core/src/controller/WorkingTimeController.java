@@ -46,13 +46,9 @@ public class WorkingTimeController {
 
     @ApiOperation(value = "Get all working time by userID")
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
-    public List<WorkingTimeResponseDto> getAllWorkingTimes(HttpServletRequest request, HttpServletResponse res,
+    public List<WorkingTimeResponseDto> getAllWorkingTimes(
             @PathVariable(name = "userID", required = true) String userID) throws IOException {
 
-        if (!tokenService.isTokenValid(request.getAttribute("userID").toString(),
-                request.getAttribute("token").toString())) {
-            res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-        }
         return workingTimeService.getAllWorkingTimes(userID);
     }
 
