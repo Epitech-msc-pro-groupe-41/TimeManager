@@ -15,6 +15,18 @@ export class AppComponent implements OnInit {
 
   }
 
+  getWorkingHour() {
+    if (this.clockService.currentClock
+      && this.clockService.currentClock.time
+      && this.clockService.currentClock.status) {
+      const time = new Date(Date.now().valueOf() - this.clockService.currentClock.time.valueOf());
+      return  `${Math.floor(time.getSeconds() / 3600)}:${Math.floor(time.getSeconds() / 60)}:${time.getSeconds() % 60}`;
+    } else {
+      return '00:00:00';
+    }
+  }
+
   ngOnInit(): void {
+    this.clockService.getClock();
   }
 }

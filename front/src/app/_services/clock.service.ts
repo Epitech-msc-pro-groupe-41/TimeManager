@@ -15,7 +15,6 @@ export class ClockService {
               private userService: UserService) {
     this.currentClock = new Clock();
     this.currentClock.status = false;
-    this.currentClock.time = 0;
   }
 
   getClock() {
@@ -24,7 +23,7 @@ export class ClockService {
         .subscribe(response => {
           console.log('getClock: ', response);
           if (response) {
-            this.currentClock.time = response.time;
+            this.currentClock.time = new Date(response.time);
             this.currentClock.status = response.status;
           }
         });
@@ -41,6 +40,7 @@ export class ClockService {
           console.log('getClock: ', response);
           if (response) {
             this.currentClock.status = response.status;
+            this.getClock();
           }
         });
     }

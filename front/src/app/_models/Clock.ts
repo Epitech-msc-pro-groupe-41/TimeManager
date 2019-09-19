@@ -1,5 +1,5 @@
 export class Clock {
-  time: number;
+  time: Date;
   status: boolean;
 
   constructor() {}
