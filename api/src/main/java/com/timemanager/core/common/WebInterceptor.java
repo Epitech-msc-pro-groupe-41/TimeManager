@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 @Component
+/**
+ * Check JWT token data : if user exist and match with the userID and token
+ */
 public class WebInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebInterceptor.class);
