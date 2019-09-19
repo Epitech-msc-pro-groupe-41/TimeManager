@@ -11,7 +11,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {
-  ClockmanagerComponent,
   DashboardComponent,
   LoginComponent,
   NavbarComponent, ProfilComponent,
@@ -20,12 +19,13 @@ import {
   WorkingtimesComponent
 } from './_components';
 import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
-import {ChartModule} from 'angular-highcharts';
 
+import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
 
 @NgModule({
   imports: [
     BrowserModule,
+    MDBBootstrapModule.forRoot(),
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -33,7 +33,7 @@ import {ChartModule} from 'angular-highcharts';
     MaterialModule,
     FlexLayoutModule,
     FormsModule,
-    ChartModule,
+    ChartsModule,
   ],
   declarations: [
     AppComponent,
@@ -43,7 +43,6 @@ import {ChartModule} from 'angular-highcharts';
     NavbarComponent,
     WorkingtimesComponent,
     TeamsComponent,
-    ClockmanagerComponent,
     ProfilComponent,
     UpdateWorkingtimeDialog,
     DeleteWorkingtimeDialog,
