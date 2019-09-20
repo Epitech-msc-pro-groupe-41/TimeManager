@@ -79,10 +79,12 @@ export class UserService {
   }
 
   logout() {
-    this.deleteUser().subscribe(response => {},
+    if (this.currentUserValue) {
+      this.deleteUser().subscribe(response => {},
         err => {
-      this.notifs.showError('User not deleted');
-    });
+          this.notifs.showError('User not deleted');
+        });
+    }
     localStorage.removeItem('currentUser');
     localStorage.removeItem('user-token');
     this.currentUserSubject.next(null);
