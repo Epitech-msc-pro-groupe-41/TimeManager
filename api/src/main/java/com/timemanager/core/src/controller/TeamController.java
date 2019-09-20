@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.timemanager.core.src.dto.TeamDto;
 import com.timemanager.core.src.dto.TeamRequestDto;
-import com.timemanager.core.src.dto.UpdateTeamRequestDto;
 import com.timemanager.core.src.service.TeamService;
 
 import org.springframework.beans.factory.annotation.Autowired;
