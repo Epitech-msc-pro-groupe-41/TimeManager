@@ -92,7 +92,7 @@ public class JWTFilter extends GenericFilterBean {
         case Manager:
             if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("clocks/")
                     || request.getRequestURI().contains("workingtimes/") || request.getRequestURI().contains("users/")
-                    || request.getRequestURI().contains("chartManager"))
+                    || request.getRequestURI().contains("chartManager") || request.getRequestURI().contains("teams/"))
                     && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("users"))
                     && !(request.getMethod().toUpperCase().equals("GET")
                             && request.getRequestURI().contains("users/all")))
@@ -101,7 +101,7 @@ public class JWTFilter extends GenericFilterBean {
         case Admin:
             if (request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("clocks/")
                     || request.getRequestURI().contains("workingtimes/") || request.getRequestURI().contains("users/")
-                    || request.getRequestURI().contains("chartManager"))
+                    || request.getRequestURI().contains("chartManager") || request.getRequestURI().contains("teams/"))
                 return true;
             break;
         }
