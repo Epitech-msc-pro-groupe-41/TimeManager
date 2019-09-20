@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
   currentUser: User;
 
   constructor(
-    private userSevice: UserService,
+    public userSevice: UserService,
     private router: Router,
     ) {
     this.userSubscription = this.userSevice.currentUser.subscribe(user => {
