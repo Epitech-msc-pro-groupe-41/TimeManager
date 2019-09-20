@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../_services';
+import {NotificationsService, UserService} from '../../_services';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -14,13 +14,13 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
-  error: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private notifs: NotificationsService,
   ) {
     // redirect to home if already logged in
     if (this.userService.currentUserValue) {
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       password: ['', Validators.required],
@@ -75,13 +75,13 @@ export class RegisterComponent implements OnInit {
                   this.router.navigate([this.returnUrl]);
                 },
                 err => {
-                  this.error = err;
+                  this.notifs.showError('Bad User token or ID');
                   this.loading = false;
                 });
           }
         },
         err => {
-          this.error = err;
+          this.notifs.showError('Email is already used or bad infos');
           this.loading = false;
         }
       );
