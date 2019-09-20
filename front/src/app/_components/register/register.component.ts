@@ -66,7 +66,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(response => {
 
           if (response && response.userID) {
-
+            localStorage.setItem('user-token', response.token);
             this.userService.getMe(response.userID)
               .pipe(first())
               .subscribe(
