@@ -5,6 +5,7 @@ import {first, map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {User} from '../_models';
 import {Router} from '@angular/router';
+import {NotificationsService} from './notifications.service';
 
 export interface RegisterParams {
   email: string;
@@ -21,7 +22,7 @@ export class UserService {
   public currentUser: Observable<User>;
   public sidenavOpened = true;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private notifs: NotificationsService) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -65,12 +66,11 @@ export class UserService {
       }));
   }
 
-  updateUser(email, username) {
+  updateUser(email, firstName, lastName) {
     return this.http.put<any>(environment.apiUrl + 'users/' + this.currentUserValue.userID, {
       email,
-      username,
-      id: this.currentUserValue.id,
-      userID: this.currentUserValue.userID
+      firstName,
+      lastName,
     });
   }
 
@@ -79,7 +79,10 @@ export class UserService {
   }
 
   logout() {
-    // remove user from local storage and set current user to null
+    this.deleteUser().subscribe(response => {},
+        err => {
+      this.notifs.showError('User not deleted');
+    });
     localStorage.removeItem('currentUser');
     localStorage.removeItem('user-token');
     this.currentUserSubject.next(null);

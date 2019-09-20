@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog} from '@angular/material';
 import {WorkingTime} from '../_models';
+import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class WorkingtimeService {
   constructor(
     private userService: UserService,
     private http: HttpClient,
+    private notifs: NotificationsService,
   ) {
   }
 
@@ -26,6 +28,8 @@ export class WorkingtimeService {
           if (response) {
             this.workingTimes = response;
           }
+        }, err => {
+          this.notifs.showError('getWorkingtimes: ' + err);
         });
     }
   }
@@ -35,8 +39,10 @@ export class WorkingtimeService {
       return this.http.post<any>(environment.apiUrl + 'workingtimes/' + this.userService.currentUserValue.userID,
         {start: start.valueOf(), end: end.valueOf()})
         .subscribe(response => {
-          console.log('createWorkingTime: ', response);
+          this.notifs.showSuccess('Working time created');
           this.getWorkingTimes();
+        }, err => {
+          this.notifs.showError('Working time not created');
         });
     }
   }
@@ -47,7 +53,10 @@ export class WorkingtimeService {
         {start: start.valueOf(), end: end.valueOf(), userID: this.userService.currentUserValue.userID})
         .subscribe(response => {
           console.log('updateWorkingTime: ', response);
+          this.notifs.showSuccess('Working time updated');
           this.getWorkingTimes();
+        }, err => {
+          this.notifs.showError('Working time not updated');
         });
     }
   }
@@ -57,7 +66,10 @@ export class WorkingtimeService {
       return this.http.delete<any>(environment.apiUrl + 'workingtimes/' + workingTimeID)
         .subscribe(response => {
           console.log('deleteWorkingTime: ', response);
+          this.notifs.showSuccess('Working time deleted');
           this.getWorkingTimes();
+        }, err => {
+          this.notifs.showError('Working time not deleted');
         });
     }
   }
