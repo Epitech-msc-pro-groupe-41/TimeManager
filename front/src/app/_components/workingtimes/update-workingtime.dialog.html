@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Working time {{wt.workingTimeID ? 'Edition' : 'Creation'}}</h1>
 <div mat-dialog-content fxLayout="column">
   <mat-form-field>
-    <input matInput placeholder="start" [(ngModel)]="wt.start">
+    <input matInput placeholder="start" type="datetime-local" [(ngModel)]="_start">
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="end" [(ngModel)]="wt.end">
+    <input matInput placeholder="end" type="datetime-local" [(ngModel)]="_end">
   </mat-form-field>
 </div>
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
   <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
-  <button [disabled]="!isFormValid()" mat-raised-button color="primary" [mat-dialog-close]="wt">{{wt.workingTimeID ? 'Update' : 'Create'}}</button>
+  <button [disabled]="!isFormValid()" mat-raised-button color="primary" (click)="onSubmit()" >{{wt.workingTimeID ? 'Update' : 'Create'}}</button>
 </div>

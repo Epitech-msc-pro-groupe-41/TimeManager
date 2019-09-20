@@ -10,14 +10,20 @@ export class UpdateWorkingtimeDialog {
 
   wt: WorkingTime;
 
+  _start: string;
+  _end: string;
+
   constructor(
     public dialogRef: MatDialogRef<UpdateWorkingtimeDialog>,
     @Inject(MAT_DIALOG_DATA) public data: WorkingTime) {
     this.wt = new WorkingTime();
     if (data) {
-      this.wt.start = data.start;
-      this.wt.end = data.end;
+      this.wt.start = new Date(data.start);
+      this.wt.end = new Date(data.end);
       this.wt.workingTimeID = data.workingTimeID;
+
+      this._start = this.wt.start.toISOString().slice(0, 16);
+      this._end = this.wt.end.toISOString().slice(0, 16);
     }
   }
 
@@ -26,7 +32,19 @@ export class UpdateWorkingtimeDialog {
   }
 
   isFormValid() {
-    return this.wt && this.wt.start && this.wt.end;
+    return this.wt && this._start && this._end;
+  }
+
+  onSubmit() {
+    if (this.isFormValid()) {
+      const start = new Date(this._start);
+      const end = new Date(this._end);
+      if (start && end) {
+        this.wt.start = start;
+        this.wt.end = end;
+        this.dialogRef.close(this.wt);
+      }
+    }
   }
 
 }

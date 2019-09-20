@@ -30,10 +30,10 @@ export class WorkingtimeService {
     }
   }
 
-  createWorkingTime(form: any) {
-    if (this.userService.currentUserValue && form) {
+  createWorkingTime(start: Date, end: Date) {
+    if (this.userService.currentUserValue && start && end) {
       return this.http.post<any>(environment.apiUrl + 'workingtimes/' + this.userService.currentUserValue.userID,
-        {start: form.start, end: form.end})
+        {start: start.valueOf(), end: end.valueOf()})
         .subscribe(response => {
           console.log('createWorkingTime: ', response);
           this.getWorkingTimes();
@@ -41,10 +41,10 @@ export class WorkingtimeService {
     }
   }
 
-  updateWorkingTime(workingTimeId , start, end) {
+  updateWorkingTime(workingTimeId , start: Date, end: Date) {
     if (this.userService.currentUserValue && workingTimeId && (start || end)) {
       return this.http.put<any>(environment.apiUrl + 'workingtimes/' + workingTimeId,
-        {start, end, userID: this.userService.currentUserValue.userID})
+        {start: start.valueOf(), end: end.valueOf(), userID: this.userService.currentUserValue.userID})
         .subscribe(response => {
           console.log('updateWorkingTime: ', response);
           this.getWorkingTimes();

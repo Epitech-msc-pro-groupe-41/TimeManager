@@ -31,7 +31,7 @@ export class WorkingtimesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed: ', result);
       if (result) {
-        this.wtService.createWorkingTime(result);
+        this.wtService.createWorkingTime(result.start, result.end);
       }
     });
   }

@@ -1,6 +1,6 @@
 export class WorkingTime {
-  start: number;
-  end: number;
+  start: Date;
+  end: Date;
   userId: string;
   workingTimeID: string;
 
