@@ -6,42 +6,33 @@
       <mat-form-field class="form-group" style="width: 45%">
         <input matInput placeholder="FirstName" required formControlName="firstName" class="form-control"
                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"/>
-        <mat-error *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-          <div *ngIf="f.firstName.errors.required">FirstName is required</div>
-        </mat-error>
+          <mat-error *ngIf="f.firstName.errors && f.firstName.errors.required">FirstName is required</mat-error>
       </mat-form-field>
 
       <mat-form-field class="form-group" style="width: 45%">
         <input matInput placeholder="LastName" required formControlName="lastName" class="form-control"
                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"/>
-        <mat-error *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-          <div *ngIf="f.lastName.errors.required">LastName is required</div>
-        </mat-error>
+          <mat-error *ngIf="f.lastName.errors &&  f.lastName.errors.required">LastName is required</mat-error>
       </mat-form-field>
     </div>
 
     <mat-form-field class="form-group">
       <input matInput placeholder="Email" required formControlName="email" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
-      <mat-error *ngIf="submitted && f.email.errors" class="invalid-feedback">
-        <div *ngIf="f.email.errors.required">Email is required</div>
-      </mat-error>
+        <mat-error *ngIf="f.email.errors &&  f.email.errors.required">Email is required</mat-error>
+      <mat-error *ngIf="f.email.errors.email">Enter a valid Email</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-group">
       <input style="width: 50%" type="password" matInput placeholder="Password" required formControlName="password" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
-      <mat-error *ngIf="submitted && f.password.errors" class="invalid-feedback">
-        <div *ngIf="f.password.errors.required">Password is required</div>
-      </mat-error>
+        <mat-error *ngIf="f.password.errors &&  f.password.errors.required">Password is required</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-group">
       <input type="password" matInput placeholder="ConfirmedPassword" required formControlName="confirmedPassword" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.confirmedPassword.errors }"/>
-      <mat-error *ngIf="submitted && f.confirmedPassword.errors" class="invalid-feedback">
-        <div *ngIf="f.confirmedPassword.errors.required">ConfirmedPassword is required</div>
-      </mat-error>
+        <mat-error *ngIf="f.confirmedPassword.errors &&  f.confirmedPassword.errors.required">ConfirmedPassword is required</mat-error>
     </mat-form-field>
 
     <div fxLayout="column" class="register-links">

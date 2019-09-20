@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {UserService, WorkingtimeService} from '../../_services';
+import {NotificationsService, UserService, WorkingtimeService} from '../../_services';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 
@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private userService: UserService,
+    private notifs: NotificationsService
   ) {
   }
 
@@ -56,6 +57,8 @@ export class DashboardComponent implements OnInit {
 
             });
           }
+        }, err => {
+          this.notifs.showError('getchart Error: ' + err);
         });
     }
   }

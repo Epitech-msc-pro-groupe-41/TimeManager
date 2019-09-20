@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {UserService} from './user.service';
 import {Clock} from '../_models';
+import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class ClockService {
   currentClock: Clock;
 
   constructor(private http: HttpClient,
-              private userService: UserService) {
+              private userService: UserService,
+              private notifs: NotificationsService) {
     this.currentClock = new Clock();
     this.currentClock.status = false;
   }
@@ -26,7 +28,10 @@ export class ClockService {
             this.currentClock.time = new Date(response.time);
             this.currentClock.status = response.status;
           }
-        });
+        },
+          err => {
+          this.notifs.showError(err);
+          });
     }
   }
 
@@ -42,6 +47,8 @@ export class ClockService {
             this.currentClock.status = response.status;
             this.getClock();
           }
+        }, error =>  {
+          this.notifs.showError(error);
         });
     }
   }

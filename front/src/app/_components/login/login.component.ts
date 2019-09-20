@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../_services';
+import {NotificationsService, UserService} from '../../_services';
 import {first} from 'rxjs/operators';
 import {error} from 'util';
 
@@ -15,13 +15,13 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
-  error: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private  notifs: NotificationsService,
   ) {
     // redirect to home if already logged in
     if (this.userService.currentUserValue) {
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
 
@@ -68,13 +68,13 @@ export class LoginComponent implements OnInit {
                 this.router.navigate([this.returnUrl]);
               },
               err => {
-                this.error = err;
+                this.notifs.showError('Bad User Token or id');
                 this.loading = false;
               });
         }
       },
       err => {
-        this.error = err;
+        this.notifs.showError('Bad credentials');
         this.loading = false;
       }
     );

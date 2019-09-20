@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../_services';
+import {NotificationsService, UserService} from '../../_services';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -12,14 +12,18 @@ export class ProfilComponent implements OnInit {
   userSubscription: Subscription;
 
   email: string;
-  username: string;
+  firstName: string;
+  lastName: string;
   loading = false;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private notifs: NotificationsService
   ) {
     this.userSubscription = this.userService.currentUser.subscribe(user => {
       this.email = user.email;
+      this.firstName = user.firstName;
+      this.lastName = user.lastName;
     });
   }
 
@@ -28,19 +32,24 @@ export class ProfilComponent implements OnInit {
 
   isFormValid() {
     return this.email
-      && this.username
-      && (this.email !== this.userService.currentUserValue.email);
+      && this.firstName
+      && this.lastName
+      && (this.email !== this.userService.currentUserValue.email
+        || this.firstName !== this.userService.currentUserValue.firstName
+        || this.lastName !== this.userService.currentUserValue.lastName);
   }
 
   onSubmit() {
     if (this.isFormValid()) {
       this.loading = true;
-      this.userService.updateUser(this.email, this.username)
+      this.userService.updateUser(this.email, this.firstName, this.lastName)
         .subscribe(response => {
           this.loading = false;
+          this.notifs.showSuccess('Profil updated');
           this.userService.refreshUser();
         }, error => {
           this.loading = false;
+          this.notifs.showSuccess('Profil not updated');
         });
     }
   }

@@ -5,21 +5,20 @@
     <mat-form-field class="form-group">
       <input matInput placeholder="Email" required formControlName="email" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
-      <mat-error *ngIf="submitted && f.email.errors" class="invalid-feedback">
-        <div *ngIf="f.email.errors.required">Email is required</div>
-      </mat-error>
+      <mat-error *ngIf="f.email.errors && f.email.errors.required">Email is required</mat-error>
+      <mat-error *ngIf="f.email.errors && f.email.errors.email">Enter a valid Email</mat-error>
     </mat-form-field>
 
     <mat-form-field class="form-group">
       <input type="password" matInput placeholder="Password" required formControlName="password" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
-      <mat-error *ngIf="submitted && f.password.errors" class="invalid-feedback">
-        <div *ngIf="f.password.errors.required">Password is required</div>
-      </mat-error>
+      <mat-error *ngIf="f.password.errors && f.password.errors.required">Password is required</mat-error>
     </mat-form-field>
 
     <div fxLayout="column" class="login-links">
-      <button style="margin-top: 10px;" [disabled]="loginForm.invalid" mat-raised-button type="submit" color="primary" >Login</button>
+      <button style="margin-top: 10px;" [disabled]="loginForm.invalid" mat-raised-button type="submit" color="primary">
+        Login
+      </button>
       <button style="margin-top: 10px;" mat-stroked-button routerLink="/register" color="primary">Register</button>
     </div>
     <mat-spinner *ngIf="loading" style="margin: 20px auto auto auto;"></mat-spinner>
