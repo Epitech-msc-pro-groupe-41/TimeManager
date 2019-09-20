@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.timemanager.core.src.constant.UserType;
-import com.timemanager.core.src.dto.AuthResponseDto;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.dto.UserUpdateRequestDto;

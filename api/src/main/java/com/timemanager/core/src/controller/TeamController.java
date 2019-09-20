@@ -3,6 +3,7 @@ package com.timemanager.core.src.controller;
 import java.util.List;
 
 import com.timemanager.core.src.dto.TeamDto;
+import com.timemanager.core.src.dto.TeamRequestDto;
 import com.timemanager.core.src.dto.UpdateTeamRequestDto;
 import com.timemanager.core.src.service.TeamService;
 
@@ -29,7 +30,7 @@ public class TeamController {
     @RequestMapping(method = RequestMethod.GET, value = "/{teamID}")
     public TeamDto getTeam(@PathVariable(name = "teamID", required = true) String teamID) {
 
-        return teamService.getTeam(teamID, true);
+        return teamService.getTeam(teamID);
     }
 
     @ApiOperation(value = "Get all teams by managerID")
@@ -40,15 +41,15 @@ public class TeamController {
     }
 
     @ApiOperation(value = "Create a new team")
-    @RequestMapping(method = RequestMethod.POST)
-    public void createTeam(@RequestBody TeamDto in) {
-        teamService.createTeam(in);
+    @RequestMapping(method = RequestMethod.POST, value = "/{managerID}")
+    public void createTeam(@RequestBody TeamRequestDto in, @PathVariable(name = "managerID", required = true) String managerID) {
+        teamService.createTeam(in, managerID);
     }
 
     @ApiOperation(value = "Update a team")
     @RequestMapping(method = RequestMethod.PUT, value = "/{teamID}")
     public void updateTeam(@PathVariable(name = "teamID", required = true) String teamID,
-            @RequestBody UpdateTeamRequestDto in) {
+            @RequestBody TeamRequestDto in) {
         teamService.updateTeam(teamID, in);
     }
 
