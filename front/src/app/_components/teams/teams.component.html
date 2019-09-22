@@ -1,1 +1,18 @@
-<p>teams works!</p>
+<div style="text-align: center; margin: 0 15%" fxLayout="column">
+  <h3>Teams</h3>
+  <button style="margin: 10px 0" mat-raised-button color="primary" (click)="openCreateTeamDialog()">
+    Create Team
+  </button>
+  <mat-card class="team-card" *ngFor="let team of teamsService.teams"
+            fxLayout="row" fxLayoutAlign="space-between">
+    <div style="margin: auto">{{team.name}}</div>
+    <div>
+      <button mat-icon-button (click)="showTeam(team.teamID)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openDeleteTeamDialog(team.teamID)">
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+</div>

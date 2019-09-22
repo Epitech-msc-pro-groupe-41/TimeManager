@@ -11,7 +11,7 @@ export class NotificationsService {
   showSuccess(message: string): void {
     this.snackBar.open(message, 'X', {
       verticalPosition: 'top',
-      duration: 3000,
+      duration: 2000,
     });
   }
 
@@ -21,6 +21,6 @@ export class NotificationsService {
     this.snackBar.open(message, 'X', {
       panelClass: ['error'],
       verticalPosition: 'top',
-      duration: 3000,
+      duration: 2000,
     });
   }}
