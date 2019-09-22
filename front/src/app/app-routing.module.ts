@@ -4,7 +4,7 @@ import {AuthGuard} from './_helpers';
 import {
   DashboardComponent,
   LoginComponent, ProfilComponent,
-  RegisterComponent,
+  RegisterComponent, TeamComponent,
   TeamsComponent,
   WorkingtimesComponent
 } from './_components';
@@ -15,9 +15,10 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
 
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard]},
   { path: 'workingtimes', component: WorkingtimesComponent, canActivate: [AuthGuard]},
   { path: 'teams', component: TeamsComponent, canActivate: [AuthGuard]},
-  { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard]},
+  { path: 'teams/:teamID', component: TeamComponent, canActivate: [AuthGuard]},
 
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
