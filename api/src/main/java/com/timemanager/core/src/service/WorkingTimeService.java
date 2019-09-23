@@ -162,4 +162,28 @@ public class WorkingTimeService {
             workingTimeRepository.delete("workingTimeID", id);
         }
     }
+
+    public List<WorkingTime> convertToListWT(List <WorkingTimeResponseDto> wt) {
+        List<WorkingTime> response = new ArrayList<>();
+
+        if (wt != null) {
+            for (WorkingTimeResponseDto work: wt) {
+                response.add(convertToList(work));
+            }    
+        }
+
+        return response;
+    }
+
+	public WorkingTime convertToList(WorkingTimeResponseDto workingtime) {
+        WorkingTime response= new WorkingTime();
+        if (response != null) {
+            response.setEnd(workingtime.getEnd());
+            response.setStart(workingtime.getStart());
+            response.setUserID(workingtime.getUserID());
+            response.setWorkingTimeID(workingtime.getWorkingTimeID());
+        }
+
+        return response;    
+	}
 }

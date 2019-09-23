@@ -29,7 +29,7 @@ public class TeamMemberController {
     @RequestMapping(method = RequestMethod.POST)
     public void addMember(@RequestBody TeamMemberRequestDto in) {
         teamMemberService.addMember(in);
-    }
+    }         
 
     @ApiOperation(value = "Remove user from a team")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{teamID}/{userID}")
