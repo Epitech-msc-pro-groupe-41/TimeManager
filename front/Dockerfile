@@ -1,20 +1,6 @@
-# Use an official node runtime as a parent image
-FROM node
+FROM nginx:alpine
 
-# Set the working directory
-WORKDIR /front
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-#Copy the current directory contents into the container
-COPY . .
-
-# The container listens on the specified network ports at runtime
-EXPOSE 8080
-
-# Run app when the container launches
-CMD [ "npm", "start" ]
+WORKDIR /usr/share/nginx/html
+COPY dist/ .
