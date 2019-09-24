@@ -66,8 +66,7 @@ public class WorkingTimeService {
 
         return response;
     }
-
-
+    
     public List<WorkingTimeResponseDto> getWorkingTimes(String userID, long start, long end){
         List<WorkingTime> workingTimes = null;
         List<WorkingTimeResponseDto> response = new ArrayList<>();
