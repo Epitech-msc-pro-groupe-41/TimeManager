@@ -21,7 +21,7 @@ services:
     networks:
       - front-tier
     ports:
-      - "8080:80"
+      - "80:80"
   mongo:
     container_name: time_manager_mongo
     image: "mongo"
