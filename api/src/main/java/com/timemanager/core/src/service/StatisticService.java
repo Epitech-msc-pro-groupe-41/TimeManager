@@ -11,27 +11,17 @@ import com.timemanager.core.src.dto.WorkingTimeResponseDto;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.timemanager.core.src.dto.ClockResponseDto;
-import com.timemanager.core.src.dto.TeamMemberRequestDto;
+import com.timemanager.core.src.dto.StatisticResponseDto;
 import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.repository.TeamMemberRepository;
-import com.timemanager.core.src.repository.UserRepository;
 import com.timemanager.core.src.service.TeamMemberService;
 import com.timemanager.core.src.service.WorkingTimeService;
 import com.timemanager.core.src.repository.WorkingTimeRepository;
 import com.timemanager.core.src.service.ClockService;
 import com.timemanager.core.src.repository.ClockRepository;
-import com.timemanager.core.src.model.Clock;
-import com.timemanager.core.src.model.Team;
-import com.timemanager.core.src.model.TeamMember;
-import com.timemanager.core.src.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class StatisticService {
@@ -59,8 +49,8 @@ public class StatisticService {
     @Autowired
     ClockService clockService;
 
-    public long getTeamStatisticByPeriod(String teamID, long start, long end) {
-
+    public StatisticResponseDto getTeamStatisticByPeriod(String teamID, long start, long end) {
+        StatisticResponseDto statDto = new StatisticResponseDto();
         int nbrdate = 0;
         long total = 0;
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -83,7 +73,8 @@ public class StatisticService {
             }
             total = total / nbrdate;
         }
-        return total;
+        statDto.setDuration(total/nbrdate);
+        return statDto;
     }
 
     private static long getDifference(Date d1, Date d2) {
@@ -98,7 +89,8 @@ public class StatisticService {
         return hours;
     }
 
-    public long getTeamStatisticByDay(String teamID, long start) {
+    public StatisticResponseDto getTeamStatisticByDay(String teamID, long start) {
+        StatisticResponseDto statDto = new StatisticResponseDto();
         int nbrdate = 0;
         long total = 0;
         long end = 0;
@@ -128,10 +120,12 @@ public class StatisticService {
                 total += difference;
             }
         }
-        return total / nbrdate;
+        statDto.setDuration(total/nbrdate);
+        return statDto;
     }
 
-    public long getUserStatisticByDay(String userID, long start) {
+    public StatisticResponseDto getUserStatisticByDay(String userID, long start) {
+        StatisticResponseDto statDto = new StatisticResponseDto();
         int nbrdate = 0;
         long total = 0;
         long end = 0;
@@ -158,10 +152,12 @@ public class StatisticService {
             long difference = getDifference(d1, d2);
             total += difference;
         }
-        return total / nbrdate;
+        statDto.setDuration(total/nbrdate);
+        return statDto;
     }
 
-    public long getUserStatisticByPeriod(String userID, long start, long end) {
+    public StatisticResponseDto getUserStatisticByPeriod(String userID, long start, long end) {
+        StatisticResponseDto statDto = new StatisticResponseDto();
         int nbrdate = 0;
         long total = 0;
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -180,7 +176,8 @@ public class StatisticService {
             long difference = getDifference(d1, d2);
             total += difference;
         }
-        return total / nbrdate;
+        statDto.setDuration(total/nbrdate);
+        return statDto;
     }
 
 }
