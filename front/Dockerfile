@@ -20,4 +20,4 @@ COPY --from=build-stage /front/dist/out/ /usr/share/nginx/html
 
 COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
