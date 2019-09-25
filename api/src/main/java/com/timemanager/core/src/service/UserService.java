@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -41,7 +42,10 @@ public class UserService {
     ClockRepository clockRepository;
     
     @Autowired
-	WorkingTimeRepository workingTimeRepository;
+    WorkingTimeRepository workingTimeRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static final Pattern pattern = 
     Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",
@@ -86,7 +90,7 @@ public class UserService {
             user.setEmail(in.getEmail().toLowerCase());
             user.setFirstName(in.getFirstName());
             user.setLastName(in.getLastName());
-            user.setPassword(in.getPassword());
+            user.setPassword(passwordEncoder.encode(in.getPassword()));
             user.setType(in.getType().name());
             userRepository.create(user);
         }

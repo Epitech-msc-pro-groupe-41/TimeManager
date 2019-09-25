@@ -54,11 +54,12 @@ public class JWTFilter extends GenericFilterBean {
                 TokenData tokenData = tokenService.getTokenData(token.substring(7));
                 if (!havePermissions(request, UserType.valueOf(tokenData.getRole()))) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not enough permissions");
+                } else {
+                    request.setAttribute("userID", tokenData.getUserID());
+                    request.setAttribute("token", tokenData.getXsrfToken());
+                    request.setAttribute("role", tokenData.getRole());
+                    filterChain.doFilter(req, res);
                 }
-                request.setAttribute("userID", tokenData.getUserID());
-                request.setAttribute("token", tokenData.getXsrfToken());
-                request.setAttribute("role", tokenData.getRole());
-                filterChain.doFilter(req, res);
             }
         }
     }
@@ -81,27 +82,29 @@ public class JWTFilter extends GenericFilterBean {
     public boolean havePermissions(HttpServletRequest request, UserType role) {
         switch (role) {
         case Employee:
-            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("clocks/")
-                    || request.getRequestURI().contains("workingtimes/") || request.getRequestURI().contains("users/")
-                    || request.getRequestURI().contains("chartManager"))
-                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("users"))
+            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
+                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
+                    || request.getRequestURI().contains("/chartManager"))
+                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("/users"))
                     && !(request.getMethod().toUpperCase().equals("GET")
                             && request.getRequestURI().contains("users/all")))
                 return true;
             break;
         case Manager:
-            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("clocks/")
-                    || request.getRequestURI().contains("workingtimes/") || request.getRequestURI().contains("users/")
-                    || request.getRequestURI().contains("chartManager") || request.getRequestURI().contains("teams/"))
-                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("users"))
+            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
+                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
+                    || request.getRequestURI().contains("/teamMembers")
+                    || request.getRequestURI().contains("/chartManager") || request.getRequestURI().contains("/teams"))
+                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("/users"))
                     && !(request.getMethod().toUpperCase().equals("GET")
                             && request.getRequestURI().contains("users/all")))
                 return true;
             break;
         case Admin:
-            if (request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("clocks/")
-                    || request.getRequestURI().contains("workingtimes/") || request.getRequestURI().contains("users/")
-                    || request.getRequestURI().contains("chartManager") || request.getRequestURI().contains("teams/"))
+            if (request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
+                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
+                    || request.getRequestURI().contains("/chartManager") || request.getRequestURI().contains("/teams")
+                    || request.getRequestURI().contains("/teamMembers"))
                 return true;
             break;
         }

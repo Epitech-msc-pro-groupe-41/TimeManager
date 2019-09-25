@@ -34,7 +34,7 @@ public class AuthService {
 
         if (in.getPassword() != null && !in.getPassword().isEmpty()) {
             userService.createUser(new UserRequestDto(in.getEmail(), in.getFirstName(), in.getLastName(),
-            passwordEncoder.encode(in.getPassword()), UserType.Employee));  
+            in.getPassword(), UserType.Employee));  
             return signIn(new LoginRequestDto(in.getEmail(), in.getPassword()));
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Password cannot be empty");

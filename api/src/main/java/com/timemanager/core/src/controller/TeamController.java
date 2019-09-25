@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -33,8 +34,8 @@ public class TeamController {
     }
 
     @ApiOperation(value = "Get all teams by managerID")
-    @RequestMapping(method = RequestMethod.GET, value = "/{managerID}")
-    public List<TeamDto> getTeamsByManager(@PathVariable(name = "managerID", required = true) String managerID) {
+    @RequestMapping(method = RequestMethod.GET)
+    public List<TeamDto> getTeamsByManager(@RequestParam(name = "managerID", required = true) String managerID) {
 
         return teamService.getTeamsByManager(managerID);
     }
