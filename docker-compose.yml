@@ -22,6 +22,8 @@ services:
       - front-tier
     ports:
       - "80:80"
+    volumes:
+      -  /etc/nginx/certs:/etc/nginx/certs
   mongo:
     container_name: time_manager_mongo
     image: "mongo"
