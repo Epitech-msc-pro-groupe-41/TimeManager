@@ -1,21 +1,22 @@
-# base image
-FROM node:12.2.0
+# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
+FROM tiangolo/node-frontend:10 as build-stage
 
-# set working directory
 WORKDIR /front
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /front/node_modules/.bin:$PATH
+COPY package*.json /front/
 
-# install and cache app dependencies
-COPY package.json /app/package.json
 RUN npm install
-RUN npm install -g @angular/cli@7.3.9
 
-# add app
-COPY . /front
+COPY ./ /front/
 
-# start app
-CMD ng serve --prod --host 0.0.0.0 --port 8080
+ARG configuration=production
 
-EXPOSE 8080
+RUN npm run build -- --output-path=./dist/out --configuration $configuration
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:1.15
+
+COPY --from=build-stage /front/dist/out/ /usr/share/nginx/html
+
+# Copy the default nginx.conf provided by tiangolo/node-frontend
+COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
