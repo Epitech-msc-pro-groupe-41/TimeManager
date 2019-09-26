@@ -9,6 +9,7 @@ import com.timemanager.core.src.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,9 @@ public class BeforeAppStartConfig implements CommandLineRunner {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @Override
     public void run(String... args) throws Exception {
@@ -25,7 +29,7 @@ public class BeforeAppStartConfig implements CommandLineRunner {
             user.setEmail("admin@timemanager.fr");
             user.setFirstName("General");
             user.setLastName("Manager");
-            user.setPassword("3PQPTRhqPp");
+            user.setPassword(passwordEncoder.encode("3PQPTRhqPp"));
             user.setType(UserType.Admin.name());
             user.setUserID("USR" + UUID.randomUUID().toString());
             userRepository.create(user);

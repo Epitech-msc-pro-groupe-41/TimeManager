@@ -1,5 +1,7 @@
 package com.timemanager.core.common;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,12 +26,14 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
+
         if (req.getRequestURI().contains("auth/signUp") || req.getRequestURI().contains("auth/signIn")
                 || req.getRequestURI().contains("swagger") || req.getRequestURI().contains("api-docs")) {
             return true;
         }
 
-        if (!tokenService.isTokenValid(req.getAttribute("userID").toString(), req.getAttribute("token").toString(), req.getAttribute("role").toString())) {
+        if (!tokenService.isTokenValid(req.getAttribute("userID").toString(), req.getAttribute("token").toString(),
+                req.getAttribute("role").toString())) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized Error");
             return false;
         }

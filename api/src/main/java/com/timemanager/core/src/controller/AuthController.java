@@ -3,12 +3,11 @@ package com.timemanager.core.src.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.AuthResponseDto;
 import com.timemanager.core.src.dto.LoginRequestDto;
 import com.timemanager.core.src.dto.RegisterRequestDto;
-import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.service.AuthService;
 import com.timemanager.core.src.service.TokenService;
 
@@ -36,6 +35,11 @@ public class AuthController {
     @ApiOperation(value = "Register a new user")
     @RequestMapping(method = RequestMethod.POST, value = "/signUp")
     public AuthResponseDto signUp(@RequestBody RegisterRequestDto in) {
+        
+        Utils.preventInjection(in.getEmail());
+        Utils.preventInjection(in.getFirstName());
+        Utils.preventInjection(in.getLastName());
+        Utils.preventInjection(in.getPassword());
 
         return authService.signUp(in);
     }
@@ -44,12 +48,16 @@ public class AuthController {
     @RequestMapping(method = RequestMethod.POST, value = "/signIn")
     public AuthResponseDto signIn(@RequestBody LoginRequestDto in) {
 
+        Utils.preventInjection(in.getEmail());
+        Utils.preventInjection(in.getPassword());
+
         return authService.signIn(in);
     }
 
     @ApiOperation(value = "Logout user")
     @RequestMapping(method = RequestMethod.GET, value = "/signOut")
     public void signOut(HttpServletRequest req) throws IOException {
+
         authService.signOut(req.getAttribute("userID").toString());
     }
 

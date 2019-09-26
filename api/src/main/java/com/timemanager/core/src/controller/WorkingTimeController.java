@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.CreateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.UpdateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.WorkingTimeResponseDto;
@@ -40,6 +41,9 @@ public class WorkingTimeController {
     public List<WorkingTimeResponseDto> getWorkingTimes(@PathVariable(name = "userID", required = true) String userID,
             @RequestParam(name = "start", required = true) long start,
             @RequestParam(name = "end", required = true) long end) {
+        Utils.preventInjection(userID);
+        Utils.preventInjection(String.valueOf(end));
+        Utils.preventInjection(String.valueOf(start));
 
         return workingTimeService.getWorkingTimes(userID, start, end);
     }
@@ -48,6 +52,7 @@ public class WorkingTimeController {
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
     public List<WorkingTimeResponseDto> getAllWorkingTimes(
             @PathVariable(name = "userID", required = true) String userID) throws IOException {
+        Utils.preventInjection(userID);
 
         return workingTimeService.getAllWorkingTimes(userID);
     }
@@ -56,6 +61,9 @@ public class WorkingTimeController {
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}/{workingtimeID}")
     public WorkingTimeResponseDto getWorkingTime(@PathVariable(name = "userID", required = true) String userID,
             @PathVariable(name = "workingtimeID", required = true) String workingtimeID) {
+        Utils.preventInjection(userID);
+        Utils.preventInjection(workingtimeID);
+
         return workingTimeService.getWorkingTime(userID, workingtimeID);
     }
 
@@ -63,19 +71,30 @@ public class WorkingTimeController {
     @RequestMapping(method = RequestMethod.POST, value = "/{userID}")
     public void createWorkingTime(@PathVariable(name = "userID", required = true) String userID,
             @RequestBody CreateWorkingTimeRequestDto in) {
+        Utils.preventInjection(userID);
+        Utils.preventInjection(String.valueOf(in.getStart()));
+        Utils.preventInjection(String.valueOf(in.getEnd()));
+
         workingTimeService.createWorkingTime(userID, in);
     }
 
     @ApiOperation(value = "Update working time")
-    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-    public void updateWorkingTime(@PathVariable(name = "id", required = true) String id,
+    @RequestMapping(method = RequestMethod.PUT, value = "/{workingTimeID}")
+    public void updateWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID,
             @RequestBody UpdateWorkingTimeRequestDto workingTime) {
-        workingTimeService.updateWorkingTime(id, workingTime);
+        Utils.preventInjection(workingTimeID);
+        Utils.preventInjection(String.valueOf(workingTime.getEnd()));
+        Utils.preventInjection(String.valueOf(workingTime.getStart()));
+        Utils.preventInjection(workingTime.getUserID());
+
+        workingTimeService.updateWorkingTime(workingTimeID, workingTime);
     }
 
     @ApiOperation(value = "Delete working time")
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void deleteWorkingTime(@PathVariable(name = "id", required = true) String id) {
-        workingTimeService.deleteWorkingTime(id);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{workingTimeID}")
+    public void deleteWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID) {
+        Utils.preventInjection(workingTimeID);
+
+        workingTimeService.deleteWorkingTime(workingTimeID);
     }
 }
