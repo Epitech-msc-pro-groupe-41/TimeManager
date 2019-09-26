@@ -17,5 +17,3 @@ RUN npm run build -- --output-path=./dist/out --configuration $configuration
 FROM nginx:1.15
 
 COPY --from=build-stage /front/dist/out/ /usr/share/nginx/html
-
-RUN /bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'
