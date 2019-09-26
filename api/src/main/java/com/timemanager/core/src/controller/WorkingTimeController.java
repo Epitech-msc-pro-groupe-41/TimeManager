@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.CreateWorkingTimeRequestDto;
 import com.timemanager.core.src.dto.UpdateWorkingTimeRequestDto;
@@ -37,6 +38,7 @@ public class WorkingTimeController {
     TokenService tokenService;
 
     @ApiOperation(value = "Get all working time of a user filter by start and end time")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "filter/{userID}")
     public List<WorkingTimeResponseDto> getWorkingTimes(@PathVariable(name = "userID", required = true) String userID,
             @RequestParam(name = "start", required = true) long start,
@@ -49,6 +51,7 @@ public class WorkingTimeController {
     }
 
     @ApiOperation(value = "Get all working time by userID")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
     public List<WorkingTimeResponseDto> getAllWorkingTimes(
             @PathVariable(name = "userID", required = true) String userID) throws IOException {
@@ -58,6 +61,7 @@ public class WorkingTimeController {
     }
 
     @ApiOperation(value = "Get working time by userID and workingtimeID")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}/{workingtimeID}")
     public WorkingTimeResponseDto getWorkingTime(@PathVariable(name = "userID", required = true) String userID,
             @PathVariable(name = "workingtimeID", required = true) String workingtimeID) {
@@ -68,6 +72,7 @@ public class WorkingTimeController {
     }
 
     @ApiOperation(value = "Create a new working time")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.POST, value = "/{userID}")
     public void createWorkingTime(@PathVariable(name = "userID", required = true) String userID,
             @RequestBody CreateWorkingTimeRequestDto in) {
@@ -79,6 +84,7 @@ public class WorkingTimeController {
     }
 
     @ApiOperation(value = "Update working time")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.PUT, value = "/{workingTimeID}")
     public void updateWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID,
             @RequestBody UpdateWorkingTimeRequestDto workingTime) {
@@ -91,6 +97,7 @@ public class WorkingTimeController {
     }
 
     @ApiOperation(value = "Delete working time")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.DELETE, value = "/{workingTimeID}")
     public void deleteWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID) {
         Utils.preventInjection(workingTimeID);

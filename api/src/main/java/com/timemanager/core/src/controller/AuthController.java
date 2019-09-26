@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.AuthResponseDto;
 import com.timemanager.core.src.dto.LoginRequestDto;
@@ -35,7 +36,7 @@ public class AuthController {
     @ApiOperation(value = "Register a new user")
     @RequestMapping(method = RequestMethod.POST, value = "/signUp")
     public AuthResponseDto signUp(@RequestBody RegisterRequestDto in) {
-        
+
         Utils.preventInjection(in.getEmail());
         Utils.preventInjection(in.getFirstName());
         Utils.preventInjection(in.getLastName());
@@ -55,9 +56,9 @@ public class AuthController {
     }
 
     @ApiOperation(value = "Logout user")
+    @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/signOut")
     public void signOut(HttpServletRequest req) throws IOException {
-
         authService.signOut(req.getAttribute("userID").toString());
     }
 

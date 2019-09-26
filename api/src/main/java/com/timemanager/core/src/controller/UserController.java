@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.dto.UserUpdateRequestDto;
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.model.User;
@@ -29,6 +30,7 @@ public class UserController {
     UserService userService;
 
     @ApiOperation(value = "Get user by userID")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
     public UserResponseDto getUser(@PathVariable("userID") String userID) {
         Utils.preventInjection(userID);
@@ -37,6 +39,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Get all user with them informations")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/all")
     public List<UserResponseDto> getAllUsers() {
 
@@ -44,6 +47,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Create a new user")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.POST)
     public UserResponseDto createUser(@RequestBody UserRequestDto user) {
         Utils.preventInjection(user.getEmail());
@@ -56,6 +60,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Update user")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.PUT, value = "/{userID}")
     public void updateUser(@PathVariable(name = "userID", required = true) String userID,
             @RequestBody UserUpdateRequestDto user) {
@@ -63,11 +68,12 @@ public class UserController {
         Utils.preventInjection(user.getEmail());
         Utils.preventInjection(user.getFirstName());
         Utils.preventInjection(user.getLastName());
-        
+
         userService.updateUser(userID, user);
     }
 
     @ApiOperation(value = "Delete user")
+    @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userID}")
     public void deleteUser(@PathVariable(name = "userID", required = true) String userID) {
         Utils.preventInjection(userID);

@@ -1,5 +1,6 @@
 package com.timemanager.core.src.controller;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.StatisticResponseDto;
 import com.timemanager.core.src.service.StatisticService;
@@ -23,6 +24,7 @@ public class StatisticController {
     StatisticService statisticService;
 
     @ApiOperation(value = "Get daily stats by userID")
+    @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/user/{userID}/{date}")
     public StatisticResponseDto getDayStatsUser(@PathVariable(name = "user", required = true) String userID,
             @PathVariable(name = "date", required = true) long date) {
@@ -34,6 +36,7 @@ public class StatisticController {
     }
 
     @ApiOperation(value = "Get month stats by userID")
+    @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/user/{userID}/{start}/{end}")
     public StatisticResponseDto getMonthStatsUser(@PathVariable(name = "userID", required = true) String userID,
             @PathVariable(name = "start", required = true) long start,
@@ -47,6 +50,7 @@ public class StatisticController {
     }
 
     @ApiOperation(value = "Get daily stats by teamID")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/team/{teamID}/{date}")
     public StatisticResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID,
             @PathVariable(name = "date", required = true) long date) {
@@ -58,6 +62,7 @@ public class StatisticController {
     }
 
     @ApiOperation(value = "Get month stats by teamID")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/team/{teamID}/{start}/{end}")
     public StatisticResponseDto getStats(@PathVariable(name = "teamID", required = true) String teamID,
             @PathVariable(name = "start", required = true) long start,

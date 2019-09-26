@@ -2,6 +2,7 @@ package com.timemanager.core.src.controller;
 
 import java.util.List;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.TeamDto;
 import com.timemanager.core.src.dto.TeamRequestDto;
@@ -28,6 +29,7 @@ public class TeamController {
     TeamService teamService;
 
     @ApiOperation(value = "Get team by teamID")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{teamID}")
     public TeamDto getTeam(@PathVariable(name = "teamID", required = true) String teamID) {
         Utils.preventInjection(teamID);
@@ -36,6 +38,7 @@ public class TeamController {
     }
 
     @ApiOperation(value = "Get all teams by managerID")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET)
     public List<TeamDto> getTeamsByManager(@RequestParam(name = "managerID", required = true) String managerID) {
         Utils.preventInjection(managerID);
@@ -44,6 +47,7 @@ public class TeamController {
     }
 
     @ApiOperation(value = "Create a new team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.POST, value = "/{managerID}")
     public void createTeam(@RequestBody TeamRequestDto in,
             @PathVariable(name = "managerID", required = true) String managerID) {
@@ -54,6 +58,7 @@ public class TeamController {
     }
 
     @ApiOperation(value = "Update a team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.PUT, value = "/{teamID}")
     public void updateTeam(@PathVariable(name = "teamID", required = true) String teamID,
             @RequestBody TeamRequestDto in) {
@@ -64,6 +69,7 @@ public class TeamController {
     }
 
     @ApiOperation(value = "delete a team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.DELETE, value = "/{teamID}")
     public void deleteTeam(@PathVariable(name = "teamID", required = true) String teamID) {
         Utils.preventInjection(teamID);

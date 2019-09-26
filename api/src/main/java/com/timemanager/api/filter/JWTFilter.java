@@ -9,7 +9,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.timemanager.core.src.constant.UserType;
 import com.timemanager.core.src.element.TokenData;
 import com.timemanager.core.src.service.TokenService;
 
@@ -52,14 +51,10 @@ public class JWTFilter extends GenericFilterBean {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
             } else {
                 TokenData tokenData = tokenService.getTokenData(token.substring(7));
-                if (!havePermissions(request, UserType.valueOf(tokenData.getRole()))) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not enough permissions");
-                } else {
-                    request.setAttribute("userID", tokenData.getUserID());
-                    request.setAttribute("token", tokenData.getXsrfToken());
-                    request.setAttribute("role", tokenData.getRole());
-                    filterChain.doFilter(req, res);
-                }
+                request.setAttribute("userID", tokenData.getUserID());
+                request.setAttribute("token", tokenData.getXsrfToken());
+                request.setAttribute("role", tokenData.getRole());
+                filterChain.doFilter(req, res);
             }
         }
     }
@@ -79,35 +74,4 @@ public class JWTFilter extends GenericFilterBean {
         return false;
     }
 
-    public boolean havePermissions(HttpServletRequest request, UserType role) {
-        switch (role) {
-        case Employee:
-            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
-                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
-                    || request.getRequestURI().contains("/chartManager"))
-                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("/users"))
-                    && !(request.getMethod().toUpperCase().equals("GET")
-                            && request.getRequestURI().contains("users/all")))
-                return true;
-            break;
-        case Manager:
-            if ((request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
-                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
-                    || request.getRequestURI().contains("/teamMembers")
-                    || request.getRequestURI().contains("/chartManager") || request.getRequestURI().contains("/teams"))
-                    && !(request.getMethod().toUpperCase().equals("POST") && request.getRequestURI().contains("/users"))
-                    && !(request.getMethod().toUpperCase().equals("GET")
-                            && request.getRequestURI().contains("users/all")))
-                return true;
-            break;
-        case Admin:
-            if (request.getRequestURI().contains("auth/signOut") || request.getRequestURI().contains("/clocks")
-                    || request.getRequestURI().contains("/workingtimes") || request.getRequestURI().contains("/users")
-                    || request.getRequestURI().contains("/chartManager") || request.getRequestURI().contains("/teams")
-                    || request.getRequestURI().contains("/teamMembers"))
-                return true;
-            break;
-        }
-        return false;
-    }
 }

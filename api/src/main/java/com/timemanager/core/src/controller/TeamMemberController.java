@@ -2,6 +2,7 @@ package com.timemanager.core.src.controller;
 
 import java.util.List;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.TeamMemberRequestDto;
 import com.timemanager.core.src.dto.UserResponseDto;
@@ -27,6 +28,7 @@ public class TeamMemberController {
     TeamMemberService teamMemberService;
 
     @ApiOperation(value = "Add user to a team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.POST)
     public void addMember(@RequestBody TeamMemberRequestDto in) {
         Utils.preventInjection(in.getTeamID());
@@ -36,6 +38,7 @@ public class TeamMemberController {
     }
 
     @ApiOperation(value = "Remove user from a team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.DELETE, value = "/{teamID}/{userID}")
     public void removeMember(@PathVariable(name = "teamID", required = true) String teamID,
             @PathVariable(name = "userID", required = true) String userID) {
@@ -46,6 +49,7 @@ public class TeamMemberController {
     }
 
     @ApiOperation(value = "Get all members of a team")
+    @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{teamID}")
     public List<UserResponseDto> getAllMember(@PathVariable(name = "teamID", required = true) String teamID) {
         Utils.preventInjection(teamID);
