@@ -41,12 +41,27 @@ public class TeamMemberService {
 
 	public void removeMember(String teamID, String userID) {
 		User user = userService.getUserById(userID, true);
+		List<TeamMember> member = teamMemberRepository.find(userID, userID);
 		Team team = teamService.getUniqueTeam(teamID, true);
 		if (team!= null && user!= null) {
-			userRepository.delete(user);
+			for (TeamMember m : member) {
+				if(m.getUserID() == userID && m.getTeamID()== teamID){
+					teamMemberRepository.delete(m);
+				}	
+			}
 		}
 	}
-
+	public void removeMember(String userID) {
+		User user = userService.getUserById(userID, true);
+		List<TeamMember> member = teamMemberRepository.find(userID, userID);
+		if (user!= null) {
+			for (TeamMember m : member) {
+				if(m.getUserID() == userID){
+					teamMemberRepository.delete(m);
+				}	
+			}
+		}
+	}
 	public List<UserResponseDto> getAllMember(String teamID) {
 		Team team = teamService.getUniqueTeam(teamID, true);
 		List<TeamMember> tm = teamMemberRepository.find("teamID", teamID);
@@ -59,5 +74,6 @@ public class TeamMemberService {
 		}
 		return liste;
 	}
+
 
 }

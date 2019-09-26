@@ -1,10 +1,6 @@
 package com.timemanager.core.src.service;
 
-import com.timemanager.core.src.model.WorkingTime;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.timemanager.core.src.dto.WorkingTimeResponseDto;
 

@@ -14,8 +14,10 @@ import com.timemanager.core.src.dto.UserUpdateRequestDto;
 import com.timemanager.core.src.model.User;
 import com.timemanager.core.src.model.WorkingTime;
 import com.timemanager.core.src.model.Clock;
+import com.timemanager.core.src.model.TeamMember;
 import com.timemanager.core.src.repository.UserRepository;
 import com.timemanager.core.src.repository.WorkingTimeRepository;
+import com.timemanager.core.src.service.TeamMemberService;
 import com.timemanager.core.src.repository.ClockRepository;
 import com.timemanager.core.src.dto.WorkingTimeResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class UserService {
 
     @Autowired
     ClockRepository clockRepository;
+
+    @Autowired
+    TeamMemberService teamMemberService;
     
     @Autowired
 	WorkingTimeRepository workingTimeRepository;
@@ -150,7 +155,6 @@ public class UserService {
         User user = getUserById(userID, true);
         List<WorkingTimeResponseDto> workingtime = workingTimeService.getAllWorkingTimes(userID);
         ClockResponseDto clock = clockService.getClock(userID, true);
-        
         if (user != null) {
             userRepository.delete(user);
             List<WorkingTime> wts =workingTimeService.convertToListWT(workingtime);
@@ -159,8 +163,8 @@ public class UserService {
             }
             Clock c = clockService.convertToClock(clock);
             clockRepository.delete(c);
-
-
+            teamMemberService.removeMember(userID);
+            
         }
     }
 
