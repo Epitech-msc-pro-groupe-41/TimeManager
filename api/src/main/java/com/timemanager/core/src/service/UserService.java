@@ -7,16 +7,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.timemanager.core.src.constant.UserType;
+import com.timemanager.core.src.dto.ClockResponseDto;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.dto.UserUpdateRequestDto;
 import com.timemanager.core.src.model.User;
+import com.timemanager.core.src.model.WorkingTime;
+import com.timemanager.core.src.model.Clock;
 import com.timemanager.core.src.repository.UserRepository;
-
+import com.timemanager.core.src.repository.WorkingTimeRepository;
+import com.timemanager.core.src.repository.ClockRepository;
+import com.timemanager.core.src.dto.WorkingTimeResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +31,21 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    WorkingTimeService workingTimeService;
+
+    @Autowired
+    ClockService clockService;
+
+    @Autowired
+    ClockRepository clockRepository;
+    
+    @Autowired
+    WorkingTimeRepository workingTimeRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static final Pattern pattern = 
     Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",
@@ -69,7 +90,7 @@ public class UserService {
             user.setEmail(in.getEmail().toLowerCase());
             user.setFirstName(in.getFirstName());
             user.setLastName(in.getLastName());
-            user.setPassword(in.getPassword());
+            user.setPassword(passwordEncoder.encode(in.getPassword()));
             user.setType(in.getType().name());
             userRepository.create(user);
         }
@@ -131,8 +152,19 @@ public class UserService {
 
     public void deleteUser(String userID) {
         User user = getUserById(userID, true);
+        List<WorkingTimeResponseDto> workingtime = workingTimeService.getAllWorkingTimes(userID);
+        ClockResponseDto clock = clockService.getClock(userID, true);
+        
         if (user != null) {
             userRepository.delete(user);
+            List<WorkingTime> wts =workingTimeService.convertToListWT(workingtime);
+            for (WorkingTime w: wts) {
+                workingTimeRepository.delete(w);
+            }
+            Clock c = clockService.convertToClock(clock);
+            clockRepository.delete(c);
+
+
         }
     }
 
@@ -160,5 +192,5 @@ public class UserService {
         }
 
         return response;    
-	}
+    }
 }

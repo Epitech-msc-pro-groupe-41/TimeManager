@@ -106,4 +106,24 @@ public class ClockService {
         }
         return response;
     }
+    public Clock convertToClock(ClockResponseDto c) {
+        Clock clock = new Clock();
+        if (c != null) {
+                clock = convertToclock(c);
+            }    
+        
+
+        return clock;
+    }
+    public Clock convertToclock(ClockResponseDto c) {
+        Clock response = new Clock();
+        if (response != null) {
+            response.setClockID(c.getClockID());
+            response.setStatus(c.getStatus());
+            response.setTime(c.getTime());
+            response.setUserID(c.getUserID());
+        }
+
+        return response;    
+	}
 }
