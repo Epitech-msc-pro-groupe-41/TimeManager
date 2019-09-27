@@ -20,6 +20,7 @@ WORKDIR /api
 # Copy from builder the jar
 COPY --from=builder /builder/target/api-0.0.1-SNAPSHOT.jar .
 
+COPY keystore.p12 .
 
 # Run .jar when the container launches
 CMD ["java", "-jar", "api-0.0.1-SNAPSHOT.jar"]
