@@ -154,15 +154,17 @@ public class UserService {
     public void deleteUser(String userID) {
         User user = getUserById(userID, true);
         List<WorkingTimeResponseDto> workingtime = workingTimeService.getAllWorkingTimes(userID);
-        ClockResponseDto clock = clockService.getClock(userID, true);
+        List<ClockResponseDto> clock = clockService.getAllClocks(userID);
         if (user != null) {
             userRepository.delete(user);
-            List<WorkingTime> wts =workingTimeService.convertToListWT(workingtime);
+            List<WorkingTime> wts = workingTimeService.convertToListWT(workingtime);
+            List<Clock> clocks = clockService.convertToListClock(clock);
             for (WorkingTime w: wts) {
                 workingTimeRepository.delete(w);
             }
-            Clock c = clockService.convertToClock(clock);
-            clockRepository.delete(c);
+            for (Clock c: clocks) {
+                clockRepository.delete(c);
+            }
             teamMemberService.removeMember(userID);
             
         }
@@ -192,5 +194,13 @@ public class UserService {
         }
 
         return response;    
+    }
+
+    public void changeRole(String userID, UserType type){
+        if (type!=null){
+            User user = getUserById(userID, true);
+            user.setType(type.name());
+            userRepository.update(user);
+        }
     }
 }

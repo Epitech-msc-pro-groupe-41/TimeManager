@@ -52,9 +52,8 @@ public class TeamMemberService {
 		}
 	}
 	public void removeMember(String userID) {
-		User user = userService.getUserById(userID, true);
-		List<TeamMember> member = teamMemberRepository.find(userID, userID);
-		if (user!= null) {
+		List<TeamMember> member = teamMemberRepository.find("userID", userID);
+		if (member!= null && member.size()>0) {
 			for (TeamMember m : member) {
 				if(m.getUserID() == userID){
 					teamMemberRepository.delete(m);

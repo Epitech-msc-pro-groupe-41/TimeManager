@@ -1,6 +1,6 @@
 package com.timemanager.core.src.service;
 
-import java.util.List;
+import java.util.*;
 import java.util.UUID;
 
 import com.timemanager.core.src.dto.ClockResponseDto;
@@ -68,6 +68,34 @@ public class ClockService {
         return res;
     }
 
+    public List<ClockResponseDto> getAllClocks(String userID) {
+        List<Clock> clocks = null;
+        List<ClockResponseDto> response = new ArrayList<>();
+
+        if (userID.isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, "Invalid parameters");  
+        } else {
+            Query query = new Query();
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)));
+            clocks = clockRepository.find(query);
+            if (clocks != null) {
+                for (Clock clock : clocks) {
+                    ClockResponseDto data = new ClockResponseDto();
+                    data.setClockID(clock.getClockID());
+                    data.setTime(clock.getTime());
+                    data.setUserID(clock.getUserID());
+                    response.add(data);
+                }
+            } else {
+                throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "No clock found"); 
+            }
+        }
+
+        return response;
+    }
+
     public Clock createClock(String userID) {
         Clock response = null;
 
@@ -125,5 +153,18 @@ public class ClockService {
         }
 
         return response;    
-	}
+    }
+    
+    public List<Clock> convertToListClock(List <ClockResponseDto> cl) {
+        List<Clock> response = new ArrayList<>();
+
+        if (cl != null) {
+            for (ClockResponseDto clock: cl) {
+                response.add(convertToclock(clock));
+            }    
+        }
+
+        return response;
+    }
+
 }
