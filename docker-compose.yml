@@ -12,6 +12,8 @@ services:
     networks:
       - back-tier
       - front-tier
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt  
   front:
     build: ./front
     image: time_manager_front
