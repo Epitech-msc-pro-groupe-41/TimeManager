@@ -7,8 +7,6 @@ services:
     restart: always
     ports:
       - "4000:4000"
-    depends_on:
-      - mongo
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
   front:
@@ -31,15 +29,6 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
 
-  mongo:
-    container_name: time_manager_mongo
-    image: "mongo"
-    #command: --auth
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - db-data:/var/lib/mongodb_timemanager/data
 
 volumes:
   db-data:
