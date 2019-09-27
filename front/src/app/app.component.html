@@ -1,5 +1,5 @@
 <app-navbar *ngIf="userService.currentUserValue"></app-navbar>
-<a mat-list-item (click)='installApp()'>
+<a mat-list-item (click)='installApp()' *ngIf="showInstallButton">
   <mat-icon mat-list-icon>download</mat-icon>
   <div mat-line>Installer l'application</div>
 </a>
