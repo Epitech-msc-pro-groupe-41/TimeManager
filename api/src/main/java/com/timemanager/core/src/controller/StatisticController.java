@@ -3,6 +3,7 @@ package com.timemanager.core.src.controller;
 import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.StatisticResponseDto;
+import com.timemanager.core.src.dto.StatsDailyResponseDto;
 import com.timemanager.core.src.service.StatisticService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -25,22 +27,20 @@ public class StatisticController {
 
     @ApiOperation(value = "Get daily stats by userID")
     @Role(access = { "Admin", "Employee", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{userID}/{date}")
-    public StatisticResponseDto getDayStatsUser(@PathVariable(name = "user", required = true) String userID,
-            @PathVariable(name = "date", required = true) long date) {
+    @RequestMapping(method = RequestMethod.GET, value = "/user/daily/{userID}")
+    public StatsDailyResponseDto getDayStatsUser(@PathVariable(name = "userID", required = true) String userID) {
 
         Utils.preventInjection(userID);
-        Utils.preventInjection(String.valueOf(date));
 
-        return statisticService.getUserStatisticByDay(userID, date);
+        return statisticService.getUserStatisticByDay(userID);
     }
 
     @ApiOperation(value = "Get month stats by userID")
     @Role(access = { "Admin", "Employee", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{userID}/{start}/{end}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/monthly/{userID}")
     public StatisticResponseDto getMonthStatsUser(@PathVariable(name = "userID", required = true) String userID,
-            @PathVariable(name = "start", required = true) long start,
-            @PathVariable(name = "end", required = true) long end) {
+            @RequestParam(name = "start", required = true) long start,
+            @RequestParam(name = "end", required = true) long end) {
 
         Utils.preventInjection(userID);
         Utils.preventInjection(String.valueOf(start));
@@ -51,9 +51,9 @@ public class StatisticController {
 
     @ApiOperation(value = "Get daily stats by teamID")
     @Role(access = { "Admin", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/team/{teamID}/{date}")
+    @RequestMapping(method = RequestMethod.GET, value = "/team/daily/{teamID}")
     public StatisticResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID,
-            @PathVariable(name = "date", required = true) long date) {
+            @RequestParam(name = "date", required = true) long date) {
 
         Utils.preventInjection(teamID);
         Utils.preventInjection(String.valueOf(date));
@@ -63,10 +63,10 @@ public class StatisticController {
 
     @ApiOperation(value = "Get month stats by teamID")
     @Role(access = { "Admin", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/team/{teamID}/{start}/{end}")
+    @RequestMapping(method = RequestMethod.GET, value = "/team/monthly/{teamID}")
     public StatisticResponseDto getStats(@PathVariable(name = "teamID", required = true) String teamID,
-            @PathVariable(name = "start", required = true) long start,
-            @PathVariable(name = "end", required = true) long end) {
+            @RequestParam(name = "start", required = true) long start,
+            @RequestParam(name = "end", required = true) long end) {
 
         Utils.preventInjection(teamID);
         Utils.preventInjection(String.valueOf(start));
