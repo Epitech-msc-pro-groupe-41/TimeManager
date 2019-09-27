@@ -26,6 +26,8 @@ import {ErrorInterceptor} from './_helpers';
 import {UpdateTeamDialog} from './_components/team/update-team.dialog';
 import {DeleteTeamDialog} from './_components/team/delete-team.dialog';
 import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -39,6 +41,7 @@ import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
     FlexLayoutModule,
     FormsModule,
     ChartsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   declarations: [
     AppComponent,
