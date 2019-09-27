@@ -52,13 +52,11 @@ public class StatisticController {
     @ApiOperation(value = "Get daily stats by teamID")
     @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/team/daily/{teamID}")
-    public StatisticResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID,
-            @RequestParam(name = "date", required = true) long date) {
+    public StatsDailyResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID) {
 
         Utils.preventInjection(teamID);
-        Utils.preventInjection(String.valueOf(date));
 
-        return statisticService.getTeamStatisticByDay(teamID, date);
+        return statisticService.getTeamStatisticByDay(teamID);
     }
 
     @ApiOperation(value = "Get month stats by teamID")

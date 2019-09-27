@@ -86,7 +86,7 @@ public class WorkingTimeController {
     @ApiOperation(value = "Update working time")
     @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.PUT, value = "/{workingTimeID}")
-    public void updateWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID,
+    public void updateWorkingTime(@PathVariable(name = "workingTimeID", required = true) String workingTimeID,
             @RequestBody UpdateWorkingTimeRequestDto workingTime) {
         Utils.preventInjection(workingTimeID);
         Utils.preventInjection(String.valueOf(workingTime.getEnd()));
@@ -99,7 +99,7 @@ public class WorkingTimeController {
     @ApiOperation(value = "Delete working time")
     @Role(access = { "Employee", "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.DELETE, value = "/{workingTimeID}")
-    public void deleteWorkingTime(@PathVariable(name = "id", required = true) String workingTimeID) {
+    public void deleteWorkingTime(@PathVariable(name = "workingTimeID", required = true) String workingTimeID) {
         Utils.preventInjection(workingTimeID);
 
         workingTimeService.deleteWorkingTime(workingTimeID);
