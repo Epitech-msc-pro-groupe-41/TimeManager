@@ -43,7 +43,6 @@ import {
     MatCardModule,
     MatSelectModule,
     MatSnackBarModule,
-
   ]
 })
 export class MaterialModule {}

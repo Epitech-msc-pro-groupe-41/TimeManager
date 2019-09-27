@@ -35,6 +35,18 @@ export class UserService {
     return this.currentUserSubject.value;
   }
 
+  isEmployee() {
+    return this.currentUserValue.type === 'Employee';
+  }
+
+  isAdmin() {
+    return this.currentUserValue.type === 'Admin';
+  }
+
+  isManager() {
+    return this.currentUserValue.type === 'Manager';
+  }
+
   login(email, password) {
     return this.http.post<any>(environment.apiUrl + 'auth/signIn', {email, password});
   }

@@ -4,6 +4,15 @@
     Time Manager
   </button>
 
+  <mat-form-field  style="color: white">
+    <mat-label style="color: white">Rights</mat-label>
+    <mat-select  style="color: white" [(value)]="userSevice.currentUserValue.type">
+      <mat-option value="Employee">Employee</mat-option>
+      <mat-option value="Manager">Manager</mat-option>
+      <mat-option value="Admin">Admin</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <button style="color: white" mat-button [matMenuTriggerFor]="menu">
     {{currentUser.email}}
     <mat-icon>keyboard_arrow_down</mat-icon>
