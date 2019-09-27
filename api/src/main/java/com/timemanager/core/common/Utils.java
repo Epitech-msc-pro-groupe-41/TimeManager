@@ -8,8 +8,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class Utils {
 
-    public static String dateLongToString(long dateTime) {
+    public static String dateTimeLongToString(long dateTime) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(dateTime);
+        return formatter.format(date);
+    }
+
+    public static String dateLongToString(long dateTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(dateTime);
         return formatter.format(date);
     }
