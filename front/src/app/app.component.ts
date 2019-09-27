@@ -24,9 +24,6 @@ export class AppComponent implements OnInit {
 
   onBeforeinstallprompt(ev) {
 
-    this.notifs.showSuccess('Event catched');
-    console.log('Event catched !!!');
-
     ev.preventDefault();
 
 // on affiche le bouton install
