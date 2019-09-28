@@ -1,5 +1,4 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile Angular
-FROM tiangolo/node-frontend:10 as build-stage
+FROM node:12.2.0
 
 WORKDIR /front
 
@@ -9,15 +8,8 @@ RUN npm install
 
 COPY ./ /front/
 
-ARG configuration=production
-RUN npm run build -- --output-path=./dist/out --configuration $configuration
+# The container listens on the specified network ports at runtime
+EXPOSE 8080
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-
-FROM nginx:1.15
-
-COPY --from=build-stage /front/dist/out/ /usr/share/nginx/html
-
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
+# Run app when the container launches
+CMD [ "npm", "start" ]
