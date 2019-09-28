@@ -28,6 +28,15 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+  mongo:
+    container_name: time_manager_mongo
+    image: "mongo"
+    #command: --auth
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/var/lib/mongodb_timemanager/data
 
 
 volumes:
