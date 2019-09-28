@@ -66,8 +66,7 @@ public class WorkingTimeService {
 
         return response;
     }
-
-
+    
     public List<WorkingTimeResponseDto> getWorkingTimes(String userID, long start, long end){
         List<WorkingTime> workingTimes = null;
         List<WorkingTimeResponseDto> response = new ArrayList<>();
@@ -78,8 +77,8 @@ public class WorkingTimeService {
         } else {
 
             Query query = new Query();
-            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)).orOperator(Criteria.where("start").is(start),
-            Criteria.where("end").is(end)));
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)).orOperator(Criteria.where("start").gte(start),
+            Criteria.where("end").lte(end)));
              workingTimes = workingTimeRepository.find(query);
              if (workingTimes != null) {
                 for (WorkingTime workingTime : workingTimes) {
@@ -162,4 +161,28 @@ public class WorkingTimeService {
             workingTimeRepository.delete("workingTimeID", id);
         }
     }
+
+    public List<WorkingTime> convertToListWT(List <WorkingTimeResponseDto> wt) {
+        List<WorkingTime> response = new ArrayList<>();
+
+        if (wt != null) {
+            for (WorkingTimeResponseDto work: wt) {
+                response.add(convertToList(work));
+            }    
+        }
+
+        return response;
+    }
+
+	public WorkingTime convertToList(WorkingTimeResponseDto workingtime) {
+        WorkingTime response= new WorkingTime();
+        if (response != null) {
+            response.setEnd(workingtime.getEnd());
+            response.setStart(workingtime.getStart());
+            response.setUserID(workingtime.getUserID());
+            response.setWorkingTimeID(workingtime.getWorkingTimeID());
+        }
+
+        return response;    
+	}
 }

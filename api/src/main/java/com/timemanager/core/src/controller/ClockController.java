@@ -1,5 +1,7 @@
 package com.timemanager.core.src.controller;
 
+import com.timemanager.core.annotation.Role;
+import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.ClockResponseDto;
 import com.timemanager.core.src.model.Clock;
 import com.timemanager.core.src.service.ClockService;
@@ -23,17 +25,22 @@ public class ClockController {
     ClockService clockService;
 
     @ApiOperation(value = "Get clocks by userID")
+    @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
-    public ClockResponseDto getClock(
-        @PathVariable(name = "userID", required = true) String userID) {
+    public ClockResponseDto getClock(@PathVariable(name = "userID", required = true) String userID) {
+
+        Utils.preventInjection(userID);
 
         return clockService.getClock(userID, true);
     }
 
     @ApiOperation(value = "Create a new clock")
+    @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.POST, value = "/{userID}")
-    public Clock createClock(
-        @PathVariable(name = "userID", required = true) String userID) {
-            return clockService.createClock(userID);
+    public Clock createClock(@PathVariable(name = "userID", required = true) String userID) {
+
+        Utils.preventInjection(userID);
+
+        return clockService.createClock(userID);
     }
 }

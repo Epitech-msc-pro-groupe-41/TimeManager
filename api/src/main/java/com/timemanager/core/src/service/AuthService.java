@@ -5,7 +5,6 @@ import com.timemanager.core.src.dto.AuthResponseDto;
 import com.timemanager.core.src.dto.LoginRequestDto;
 import com.timemanager.core.src.dto.RegisterRequestDto;
 import com.timemanager.core.src.dto.UserRequestDto;
-import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.model.User;
 
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ public class AuthService {
 
         if (in.getPassword() != null && !in.getPassword().isEmpty()) {
             userService.createUser(new UserRequestDto(in.getEmail(), in.getFirstName(), in.getLastName(),
-            passwordEncoder.encode(in.getPassword()), UserType.Employee));  
+                    in.getPassword(), UserType.Employee));
             return signIn(new LoginRequestDto(in.getEmail(), in.getPassword()));
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Password cannot be empty");
@@ -42,6 +41,7 @@ public class AuthService {
     }
 
     public AuthResponseDto signIn(LoginRequestDto in) {
+
         User user = userService.getUserByEmail(in.getEmail(), true);
         if (passwordEncoder.matches(in.getPassword(), user.getPassword())) {
             String token = tokenService.createToken(user.getUserID(), user.getType());
@@ -54,6 +54,7 @@ public class AuthService {
     }
 
     public void signOut(String userID) {
+
         User user = userService.getUserById(userID, true);
         user.setToken(null);
         userService.updateUser(user);

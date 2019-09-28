@@ -62,7 +62,8 @@ public class TeamService {
 	public void createTeam(TeamRequestDto in, String managerID) {
 		if (in.getName() != null && !in.getName().isEmpty()) {
 			User user = userService.getUserById(managerID, true);
-			if (user.getType() == UserType.Manager.name() || user.getType() == UserType.Admin.name()) {
+			if (user.getType().toUpperCase().equals(UserType.Manager.name().toUpperCase())
+					|| user.getType().toUpperCase().equals(UserType.Admin.name().toUpperCase())) {
 				Team team = new Team();
 				team.setCreateDate(System.currentTimeMillis());
 				team.setManagerID(managerID);
@@ -70,7 +71,8 @@ public class TeamService {
 				team.setName(in.getName());
 				teamRepository.create(team);
 			} else {
-				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You don't have enough permissions");
+				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+						"User ID given in parameter have not enough permissions to manage a team");
 			}
 		} else {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid value for team name");

@@ -7,16 +7,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.timemanager.core.src.constant.UserType;
+import com.timemanager.core.src.dto.ClockResponseDto;
 import com.timemanager.core.src.dto.UserRequestDto;
 import com.timemanager.core.src.dto.UserResponseDto;
 import com.timemanager.core.src.dto.UserUpdateRequestDto;
 import com.timemanager.core.src.model.User;
+import com.timemanager.core.src.model.WorkingTime;
+import com.timemanager.core.src.model.Clock;
 import com.timemanager.core.src.repository.UserRepository;
-
+import com.timemanager.core.src.repository.WorkingTimeRepository;
+import com.timemanager.core.src.repository.ClockRepository;
+import com.timemanager.core.src.dto.WorkingTimeResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,27 +32,43 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public static final Pattern pattern = 
-    Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",
-        Pattern.CASE_INSENSITIVE);
+    @Autowired
+    WorkingTimeService workingTimeService;
+
+    @Autowired
+    ClockService clockService;
+
+    @Autowired
+    TeamMemberService teamMemberService;
+
+    @Autowired
+    ClockRepository clockRepository;
+
+    @Autowired
+    WorkingTimeRepository workingTimeRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public static final Pattern pattern = Pattern.compile(
+            "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$",
+            Pattern.CASE_INSENSITIVE);
 
     public User getUserByEmail(String email, boolean trigger) {
         User user = null;
 
         if (!email.isEmpty()) {
             Query query = new Query();
-            query.addCriteria(Criteria.where("email").is(email.toLowerCase()));            
+            query.addCriteria(Criteria.where("email").is(email.toLowerCase()));
             List<User> users = userRepository.find(query);
             if (users.size() == 0) {
                 if (trigger) {
-                    throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Invalid email or password");             
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid email or password");
                 }
-            } else 
+            } else
                 user = users.get(0);
         } else {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid value for email");     
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid value for email");
         }
         return user;
     }
@@ -57,11 +79,9 @@ public class UserService {
         Matcher matcher = pattern.matcher(in.getEmail());
 
         if (!matcher.matches() || in.getFirstName().isEmpty() || in.getLastName().isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Incorrect value for mail");     
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Incorrect value for mail");
         } else if (getUserByEmail(in.getEmail(), false) != null) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "This email is already used");     
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This email is already used");
         } else {
             user = new User();
             userID = "USR" + UUID.randomUUID().toString();
@@ -69,14 +89,14 @@ public class UserService {
             user.setEmail(in.getEmail().toLowerCase());
             user.setFirstName(in.getFirstName());
             user.setLastName(in.getLastName());
-            user.setPassword(in.getPassword());
+            user.setPassword(passwordEncoder.encode(in.getPassword()));
             user.setType(in.getType().name());
             userRepository.create(user);
         }
-        return new UserResponseDto(user.getUserID(), user.getEmail(), user.getFirstName(),
-            user.getLastName(), UserType.valueOf(user.getType()));
+        return new UserResponseDto(user.getUserID(), user.getEmail(), user.getFirstName(), user.getLastName(),
+                UserType.valueOf(user.getType()));
     }
-    
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -86,8 +106,7 @@ public class UserService {
         User user = getUserById(userID, true);
 
         if (user != null && !matcher.matches() && in.getFirstName().isEmpty() && in.getLastName().isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
             user.setEmail(in.getEmail());
             user.setFirstName(in.getFirstName());
@@ -105,22 +124,20 @@ public class UserService {
 
         if (userID.isEmpty()) {
             if (trigger) {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Invalid parameters");     
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
             } else {
                 return null;
             }
         } else {
             Query query = new Query();
-            query.addCriteria(Criteria.where("userID").is(userID));            
+            query.addCriteria(Criteria.where("userID").is(userID));
 
             users = userRepository.find(query);
         }
-        
+
         if (users == null || users.size() == 0) {
             if (trigger) {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "No user found");    
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No user found");
             } else {
                 return null;
             }
@@ -131,9 +148,28 @@ public class UserService {
 
     public void deleteUser(String userID) {
         User user = getUserById(userID, true);
+        List<WorkingTimeResponseDto> workingtime = workingTimeService.getAllWorkingTimes(userID);
+        List<Clock> clocks = clockService.getAllClocks(userID);
+
         if (user != null) {
+            List<WorkingTime> wts = workingTimeService.convertToListWT(workingtime);
+
+            if (workingtime != null && workingtime.size() > 0) {
+                for (WorkingTime w : wts) {
+                    workingTimeRepository.delete(w);
+                }
+            }
+
+            if (clocks != null & clocks.size() > 0) {
+                for (Clock c : clocks) {
+                    clockRepository.delete(c);
+                }
+            }
+
+            teamMemberService.removeMember(userID);
             userRepository.delete(user);
         }
+
     }
 
     public List<UserResponseDto> convertToListResponseDto(List<User> users) {
@@ -142,13 +178,13 @@ public class UserService {
         if (users != null) {
             for (User user : users) {
                 response.add(convertToResponseDto(user));
-            }    
+            }
         }
 
         return response;
     }
 
-	public UserResponseDto convertToResponseDto(User user) {
+    public UserResponseDto convertToResponseDto(User user) {
         UserResponseDto response = new UserResponseDto();
 
         if (user != null) {
@@ -159,6 +195,14 @@ public class UserService {
             response.setUserID(user.getUserID());
         }
 
-        return response;    
-	}
+        return response;
+    }
+
+    public void changeRole(String userID, UserType type) {
+        if (type != null && userID != null) {
+            User user = getUserById(userID, true);
+            user.setType(type.name());
+            userRepository.update(user);
+        }
+    }
 }
