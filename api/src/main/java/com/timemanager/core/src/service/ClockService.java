@@ -1,5 +1,6 @@
 package com.timemanager.core.src.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -125,5 +126,20 @@ public class ClockService {
         }
 
         return response;    
-	}
+    }
+    
+    public List<Clock> getAllClocks(String userID) {
+        List<Clock> clocks = null;
+
+        if (userID.isEmpty()) {
+            throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN, "Invalid parameters");  
+        } else {
+            Query query = new Query();
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)));
+            clocks = clockRepository.find(query);
+        }
+
+        return clocks;
+    }
 }

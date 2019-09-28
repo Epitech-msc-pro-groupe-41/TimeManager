@@ -74,6 +74,17 @@ public class TeamMemberService {
 		teamMemberRepository.delete(teamMember);
 	}
 
+	public void removeMember(String userID) {
+		List<TeamMember> member = teamMemberRepository.find("userID", userID);
+		if (member != null && member.size() > 0) {
+			for (TeamMember m : member) {
+				if (m.getUserID() == userID) {
+					teamMemberRepository.delete(m);
+				}
+			}
+		}
+	}
+
 	public List<UserResponseDto> getAllMember(String teamID) {
 		Team team = teamService.getUniqueTeam(teamID, true);
 		List<TeamMember> tm = teamMemberRepository.find("teamID", teamID);
