@@ -32,7 +32,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.snapshot.params.teamID) {
-      /*this.teamsService.getTeamById(this.route.snapshot.params.teamID)
+      this.teamsService.getTeamById(this.route.snapshot.params.teamID)
         .subscribe(response => {
           if (response) {
             this.team = response;
@@ -41,22 +41,7 @@ export class TeamComponent implements OnInit {
         }, error => {
           this.router.navigate(['teams']);
           this.notifs.showError('Bad teamID');
-        });*/
-      this.team = {
-        name: 'Team 1',
-        managerID: '123456',
-        teamID: '123456',
-        createDate: new Date(),
-      };
-
-      const tmp = new User();
-      tmp.firstName = 'John';
-      tmp.lastName = 'Do';
-      tmp.email = 'john.do@gmail.com';
-
-      this.employees = [
-        tmp, tmp, tmp, tmp, tmp
-      ];
+        });
     } else {
       this.router.navigate(['teams']);
       this.notifs.showError('No TeamID specified');
@@ -73,7 +58,7 @@ export class TeamComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed: ', result);
       if (result) {
-        this.teamsService.createTeam(result);
+        this.teamsService.updateTeam(this.team.teamID, result);
       }
     });
   }
@@ -99,10 +84,10 @@ export class TeamComponent implements OnInit {
   }
 
   getEmployees() {
-    /*  this.teamsService.getTeamMembers(this.team.teamID)
+      this.teamsService.getTeamMembers(this.team.teamID)
         .subscribe( employees => {
           this.employees = employees;
-        });*/
+        });
   }
 
   openRemoveEmployee(user: User) {
