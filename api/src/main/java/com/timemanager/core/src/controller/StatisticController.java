@@ -25,20 +25,22 @@ public class StatisticController {
     @Autowired
     StatisticService statisticService;
 
-    @ApiOperation(value = "Get daily stats by userID")
+    @ApiOperation(value = "Get daily stats by userID between a period")
     @Role(access = { "Admin", "Employee", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/user/daily/{userID}")
-    public StatsDailyResponseDto getDayStatsUser(@PathVariable(name = "userID", required = true) String userID) {
+    public StatsDailyResponseDto getDayStatsUser(@PathVariable(name = "userID", required = true) String userID,
+            @RequestParam(name = "start", required = true) long start,
+            @RequestParam(name = "end", required = true) long end) {
 
         Utils.preventInjection(userID);
 
-        return statisticService.getUserStatisticByDay(userID);
+        return statisticService.getUserStatisticByDay(userID, start, end);
     }
 
-    @ApiOperation(value = "Get month stats by userID")
+    @ApiOperation(value = "Get weekly stats by userID between a period")
     @Role(access = { "Admin", "Employee", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/user/monthly/{userID}")
-    public StatisticResponseDto getMonthStatsUser(@PathVariable(name = "userID", required = true) String userID,
+    @RequestMapping(method = RequestMethod.GET, value = "/user/weekly/{userID}")
+    public StatsDailyResponseDto getMonthStatsUser(@PathVariable(name = "userID", required = true) String userID,
             @RequestParam(name = "start", required = true) long start,
             @RequestParam(name = "end", required = true) long end) {
 
@@ -49,20 +51,22 @@ public class StatisticController {
         return statisticService.getUserStatisticByPeriod(userID, start, end);
     }
 
-    @ApiOperation(value = "Get daily stats by teamID")
+    @ApiOperation(value = "Get daily stats by teamID between a period")
     @Role(access = { "Admin", "Manager" })
     @RequestMapping(method = RequestMethod.GET, value = "/team/daily/{teamID}")
-    public StatsDailyResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID) {
+    public StatsDailyResponseDto getDayStatsTeam(@PathVariable(name = "teamID", required = true) String teamID,
+            @RequestParam(name = "start", required = true) long start,
+            @RequestParam(name = "end", required = true) long end) {
 
         Utils.preventInjection(teamID);
 
-        return statisticService.getTeamStatisticByDay(teamID);
+        return statisticService.getTeamStatisticByDay(teamID, start, end);
     }
 
-    @ApiOperation(value = "Get month stats by teamID")
+    @ApiOperation(value = "Get weekly stats by teamID between a period")
     @Role(access = { "Admin", "Manager" })
-    @RequestMapping(method = RequestMethod.GET, value = "/team/monthly/{teamID}")
-    public StatisticResponseDto getStats(@PathVariable(name = "teamID", required = true) String teamID,
+    @RequestMapping(method = RequestMethod.GET, value = "/team/weekly/{teamID}")
+    public StatsDailyResponseDto getStats(@PathVariable(name = "teamID", required = true) String teamID,
             @RequestParam(name = "start", required = true) long start,
             @RequestParam(name = "end", required = true) long end) {
 
