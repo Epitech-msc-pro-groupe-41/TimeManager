@@ -201,8 +201,12 @@ public class UserService {
     public void changeRole(String userID, UserType type) {
         if (type != null && userID != null) {
             User user = getUserById(userID, true);
-            user.setType(type.name());
-            userRepository.update(user);
+            if (user.getEmail().equals("admin@timemanager.fr")) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can't change default admin user role");
+            } else {
+                user.setType(type.name());
+                userRepository.update(user);
+            }
         }
     }
 }
