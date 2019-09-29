@@ -18,7 +18,7 @@ export class ProfilComponent implements OnInit {
   type: string;
 
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private notifs: NotificationsService
   ) {
     this.userSubscription = this.userService.currentUser.subscribe(user => {
