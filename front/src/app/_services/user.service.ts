@@ -47,6 +47,20 @@ export class UserService {
     return this.currentUserValue.type === 'Manager';
   }
 
+  changeRole(type: string) {
+    if (type !== this.currentUserValue.type
+      && (type === 'Employee'
+        || type === 'Admin'
+        || type === 'Manager')) {
+      return this.http.post<any>(environment.apiUrl + 'users/changeRole/' + this.currentUserValue.userID, {type})
+        .subscribe(response => {
+          this.notifs.showSuccess('Role changed');
+        }, error => {
+          this.notifs.showError('Role not changed');
+        });
+    }
+  }
+
   login(email, password) {
     return this.http.post<any>(environment.apiUrl + 'auth/signIn', {email, password});
   }
