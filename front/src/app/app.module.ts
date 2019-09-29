@@ -15,7 +15,7 @@ import {
   LoginComponent,
   NavbarComponent, ProfilComponent,
   RegisterComponent, TeamComponent,
-  TeamsComponent, UpdateWorkingtimeDialog,
+  TeamsComponent, UpdateWorkingtimeDialog, UsersComponent,
   WorkingtimesComponent
 } from './_components';
 import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
@@ -26,6 +26,8 @@ import {ErrorInterceptor} from './_helpers';
 import {UpdateTeamDialog} from './_components/team/update-team.dialog';
 import {DeleteTeamDialog} from './_components/team/delete-team.dialog';
 import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
+import {AddEmployeeDialog} from './_components/team/add-employee.dialog';
+import {ChangeRoleDialog} from './_components/users/change-role.dialog';
 
 @NgModule({
   imports: [
@@ -55,6 +57,9 @@ import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
     UpdateTeamDialog,
     DeleteTeamDialog,
     RemoveEmployeeDialog,
+    UsersComponent,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
   ],
   entryComponents: [
     UpdateWorkingtimeDialog,
@@ -62,6 +67,8 @@ import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
     UpdateTeamDialog,
     DeleteTeamDialog,
     RemoveEmployeeDialog,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

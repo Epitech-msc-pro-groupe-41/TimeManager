@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_helpers';
 import {
-    DashboardComponent,
-    LoginComponent, ProfilComponent,
-    RegisterComponent, TeamComponent,
-    TeamsComponent,
-    WorkingtimesComponent
+  DashboardComponent,
+  LoginComponent, ProfilComponent,
+  RegisterComponent, TeamComponent,
+  TeamsComponent, UsersComponent,
+  WorkingtimesComponent
 } from './_components';
 
 
@@ -30,6 +30,11 @@ const routes: Routes = [
             allowedRoles: ['Admin', 'Manager']
         }
     },
+  {
+    path: 'users', component: UsersComponent, canActivate: [AuthGuard], data: {
+      allowedRoles: ['Admin', 'Manager']
+    }
+  },
 
     // otherwise redirect to home
     { path: '**', redirectTo: 'dashboard' }

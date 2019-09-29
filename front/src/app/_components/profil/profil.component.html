@@ -11,9 +11,6 @@
           <mat-option value="Admin">Admin</mat-option>
         </mat-select>
       </mat-form-field>
-
-      <button [disabled]="userService.isEmployee() || type === userService.currentUserValue.type" mat-raised-button (click)="userService.changeRole(type)" color="primary"> Change type </button>
-
     </div>
 
     <div fxLayout="row" fxLayoutAlign="space-between">

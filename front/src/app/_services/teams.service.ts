@@ -28,11 +28,13 @@ export class TeamsService {
   }
 
   getAllTeams() {
-    return this.http.get<any>(environment.apiUrl + 'teams/' + this.currentUser.userID)
+    return this.http.get<any>(environment.apiUrl + 'teams?managerID=' + this.currentUser.userID)
       .subscribe(teams => {
         if (teams) {
           this.teams = teams;
         }
+      }, error => {
+        this.notifs.showError('Can\'t get teams');
       });
   }
 
@@ -67,7 +69,7 @@ export class TeamsService {
     return this.http.get<any>(environment.apiUrl + 'teamMembers/' + teamID);
   }
 
-  addUserToTeam(userID: string, teamID: string) {
+  addUserToTeam({userID, teamID}) {
     return this.http.post<any>(environment.apiUrl + 'teamMembers', {
       userID,
       teamID

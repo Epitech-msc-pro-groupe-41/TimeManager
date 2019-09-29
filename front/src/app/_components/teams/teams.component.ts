@@ -50,6 +50,7 @@ export class TeamsComponent implements OnInit {
       if (result) {
         this.teamsService.deleteTeam(teamID).subscribe(response => {
           this.notifs.showSuccess('Team deleted');
+          this.teamsService.getAllTeams();
         }, error => {
           this.notifs.showError('Team not deleted');
         });
