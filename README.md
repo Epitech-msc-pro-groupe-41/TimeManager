@@ -1,7 +1,5 @@
 # TimeManager
 
-front: http://kahoul-timemanager.francecentral.cloudapp.azure.com:8080
+App: https://timemanager.francecentral.cloudapp.azure.com
 
-api: http://kahoul-timemanager.francecentral.cloudapp.azure.com:4000
-
-swagger: http://kahoul-timemanager.francecentral.cloudapp.azure.com:4000/rest/swagger-ui.html
+Documentation: https://timemanager.francecentral.cloudapp.azure.com:4000/rest/swagger-ui.html
