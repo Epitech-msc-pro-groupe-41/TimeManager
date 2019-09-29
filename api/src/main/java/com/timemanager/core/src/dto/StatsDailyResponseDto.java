@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 public class StatsDailyResponseDto {
 
-    ArrayList<StatsElementResponseDto> dailyHours;
+    ArrayList<StatsElementResponseDto> data;
 
-    public ArrayList<StatsElementResponseDto> getDailyHours() {
-        return dailyHours;
+    public ArrayList<StatsElementResponseDto> getData() {
+        return data;
     }
 
-    public void setDailyHours(ArrayList<StatsElementResponseDto> dailyHours) {
-        this.dailyHours = dailyHours;
+    public void setData(ArrayList<StatsElementResponseDto> data) {
+        this.data = data;
     }
+
 }
