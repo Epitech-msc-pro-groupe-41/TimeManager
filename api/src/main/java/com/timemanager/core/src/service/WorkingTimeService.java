@@ -42,8 +42,7 @@ public class WorkingTimeService {
         List<WorkingTimeResponseDto> response = new ArrayList<>();
 
         if (userID.isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
 
             Query query = new Query();
@@ -59,28 +58,26 @@ public class WorkingTimeService {
                     response.add(data);
                 }
             } else {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "No working time found"); 
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No working time found");
             }
         }
 
         return response;
     }
-    
-    public List<WorkingTimeResponseDto> getWorkingTimes(String userID, long start, long end){
+
+    public List<WorkingTimeResponseDto> getWorkingTimes(String userID, long start, long end) {
         List<WorkingTime> workingTimes = null;
         List<WorkingTimeResponseDto> response = new ArrayList<>();
 
         if (userID.isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
 
             Query query = new Query();
-            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID)).orOperator(Criteria.where("start").gte(start),
-            Criteria.where("end").lte(end)));
-             workingTimes = workingTimeRepository.find(query);
-             if (workingTimes != null) {
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID))
+                    .orOperator(Criteria.where("start").gte(start), Criteria.where("end").lte(end)));
+            workingTimes = workingTimeRepository.find(query);
+            if (workingTimes != null) {
                 for (WorkingTime workingTime : workingTimes) {
                     WorkingTimeResponseDto data = new WorkingTimeResponseDto();
                     data.setEnd(workingTime.getEnd());
@@ -90,8 +87,7 @@ public class WorkingTimeService {
                     response.add(data);
                 }
             } else {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "No working time found"); 
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No working time found");
             }
         }
 
@@ -114,8 +110,7 @@ public class WorkingTimeService {
         List<WorkingTime> workingTimes = null;
 
         if (userID.isEmpty() || workingTimeID.isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
             Query query = new Query();
             query.addCriteria(Criteria.where("userID").is(userID).and("workingTimeID").is(workingTimeID));
@@ -123,29 +118,30 @@ public class WorkingTimeService {
             if (workingTimes != null && workingTimes.size() > 0) {
                 return workingTimes.get(0);
             } else {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "No working time found"); 
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No working time found");
             }
         }
     }
 
     public void updateWorkingTime(String id, UpdateWorkingTimeRequestDto in) {
         if (id.isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
             Query query = new Query();
             query.addCriteria(Criteria.where("userID").is(in.getUserID()).and("workingTimeID").is(id));
             List<WorkingTime> workingTimes = workingTimeRepository.find(query);
             if (workingTimes != null) {
                 WorkingTime workingTime = workingTimes.get(0);
-                workingTime.setEnd(in.getEnd());
-                workingTime.setStart(in.getStart());
-                workingTimeRepository.update(workingTime);
-            }  else {
-                throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "No working time found"); 
-            }          
+                if (workingTime.getEnd() != -1) {
+                    workingTime.setEnd(in.getEnd());
+                    workingTime.setStart(in.getStart());
+                    workingTimeRepository.update(workingTime);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot modify an ongoing working time");
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No working time found");
+            }
         }
     }
 
@@ -153,29 +149,40 @@ public class WorkingTimeService {
         workingTimeRepository.update(workingTime);
     }
 
-    public void deleteWorkingTime(String id) {
-        if (id.isEmpty()) {
-            throw new ResponseStatusException(
-                HttpStatus.FORBIDDEN, "Invalid parameters");  
+    public void deleteWorkingTime(String workingTimeID) {
+        if (workingTimeID.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid parameters");
         } else {
-            workingTimeRepository.delete("workingTimeID", id);
+            Query query = new Query();
+            query.addCriteria(Criteria.where("workingTimeID").is(workingTimeID));
+            List<WorkingTime> workingTimes = workingTimeRepository.find(query);
+            if (workingTimes != null) {
+                WorkingTime workingTime = workingTimes.get(0);
+                if (workingTime.getEnd() != -1) {
+                    workingTimeRepository.delete("workingTimeID", workingTimeID);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot delete an ongoing working time");
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No working time found");
+            }
         }
     }
 
-    public List<WorkingTime> convertToListWT(List <WorkingTimeResponseDto> wt) {
+    public List<WorkingTime> convertToListWT(List<WorkingTimeResponseDto> wt) {
         List<WorkingTime> response = new ArrayList<>();
 
         if (wt != null) {
-            for (WorkingTimeResponseDto work: wt) {
+            for (WorkingTimeResponseDto work : wt) {
                 response.add(convertToList(work));
-            }    
+            }
         }
 
         return response;
     }
 
-	public WorkingTime convertToList(WorkingTimeResponseDto workingtime) {
-        WorkingTime response= new WorkingTime();
+    public WorkingTime convertToList(WorkingTimeResponseDto workingtime) {
+        WorkingTime response = new WorkingTime();
         if (response != null) {
             response.setEnd(workingtime.getEnd());
             response.setStart(workingtime.getStart());
@@ -183,6 +190,6 @@ public class WorkingTimeService {
             response.setWorkingTimeID(workingtime.getWorkingTimeID());
         }
 
-        return response;    
-	}
+        return response;
+    }
 }
