@@ -1,5 +1,6 @@
 package com.timemanager.core.src.controller;
 
+import com.timemanager.core.annotation.Role;
 import com.timemanager.core.common.Utils;
 import com.timemanager.core.src.dto.ChartResponseDto;
 import com.timemanager.core.src.service.ChartManagerService;
@@ -23,6 +24,7 @@ public class ChartManagerController {
     ChartManagerService chartManagerService;
 
     @ApiOperation(value = "Get/Refresh data for charts (chart 1 : working hours by day")
+    @Role(access = {"Employee", "Manager", "Admin"})
     @RequestMapping(method = RequestMethod.GET, value = "/{userID}")
     public ChartResponseDto getChartData(@PathVariable(name = "userID", required = true) String userID) {
 
