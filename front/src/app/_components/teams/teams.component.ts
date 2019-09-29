@@ -18,15 +18,10 @@ export class TeamsComponent implements OnInit {
     private notifs: NotificationsService,
     private router: Router,
     public dialog: MatDialog,
-    private userService: UserService,
   ) {
   }
 
   ngOnInit() {
-    if (this.userService.isEmployee()) {
-      this.notifs.showError('You don\'t have the rights to access this page');
-      this.router.navigate(['dashboard']);
-    }
     this.teamsService.getAllTeams();
   }
 
@@ -55,6 +50,7 @@ export class TeamsComponent implements OnInit {
       if (result) {
         this.teamsService.deleteTeam(teamID).subscribe(response => {
           this.notifs.showSuccess('Team deleted');
+          this.teamsService.getAllTeams();
         }, error => {
           this.notifs.showError('Team not deleted');
         });

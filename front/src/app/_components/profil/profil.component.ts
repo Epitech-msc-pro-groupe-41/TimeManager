@@ -15,15 +15,19 @@ export class ProfilComponent implements OnInit {
   firstName: string;
   lastName: string;
   loading = false;
+  type: string;
 
   constructor(
     private userService: UserService,
     private notifs: NotificationsService
   ) {
     this.userSubscription = this.userService.currentUser.subscribe(user => {
-      this.email = user.email;
-      this.firstName = user.firstName;
-      this.lastName = user.lastName;
+      if (user) {
+        this.email = user.email;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.type = user.type;
+      }
     });
   }
 

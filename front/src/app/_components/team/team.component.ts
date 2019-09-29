@@ -6,6 +6,7 @@ import {UpdateTeamDialog} from './update-team.dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DeleteTeamDialog} from './delete-team.dialog';
 import {RemoveEmployeeDialog} from './remove-employee.dialog';
+import {AddEmployeeDialog} from './add-employee.dialog';
 
 @Component({
   selector: 'app-team',
@@ -32,35 +33,45 @@ export class TeamComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.snapshot.params.teamID) {
-      /*this.teamsService.getTeamById(this.route.snapshot.params.teamID)
-        .subscribe(response => {
-          if (response) {
-            this.team = response;
-            this.getEmployees();
-          }
-        }, error => {
-          this.router.navigate(['teams']);
-          this.notifs.showError('Bad teamID');
-        });*/
-      this.team = {
-        name: 'Team 1',
-        managerID: '123456',
-        teamID: '123456',
-        createDate: new Date(),
-      };
-
-      const tmp = new User();
-      tmp.firstName = 'John';
-      tmp.lastName = 'Do';
-      tmp.email = 'john.do@gmail.com';
-
-      this.employees = [
-        tmp, tmp, tmp, tmp, tmp
-      ];
+      this.refreshTeam();
     } else {
       this.router.navigate(['teams']);
       this.notifs.showError('No TeamID specified');
     }
+  }
+
+  refreshTeam() {
+    this.teamsService.getTeamById(this.route.snapshot.params.teamID)
+      .subscribe(response => {
+        if (response) {
+          this.team = response;
+          this.getEmployees();
+        }
+      }, error => {
+        this.router.navigate(['teams']);
+        this.notifs.showError('Bad teamID');
+      });
+  }
+
+  openAddEmployeeDialog() {
+    const dialogRef = this.dialog.open(AddEmployeeDialog,
+      {
+        data: {team: this.team},
+        width: '300px',
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed: ', result);
+      if (result) {
+        this.teamsService.addUserToTeam({userID: result.user.userID, teamID: result.team.teamID})
+          .subscribe(response => {
+            this.notifs.showSuccess('User added to team');
+            this.getEmployees();
+          }, error => {
+            this.notifs.showError('User not added to team');
+          });
+      }
+    });
   }
 
   openUpdateTeamDialog() {
@@ -73,7 +84,13 @@ export class TeamComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed: ', result);
       if (result) {
-        this.teamsService.createTeam(result);
+        this.teamsService.updateTeam(this.team.teamID, result)
+          .subscribe(response => {
+            this.notifs.showSuccess('Team updated');
+            this.refreshTeam();
+          }, error => {
+            this.notifs.showError('Team not updated');
+          });
       }
     });
   }
@@ -99,10 +116,10 @@ export class TeamComponent implements OnInit {
   }
 
   getEmployees() {
-    /*  this.teamsService.getTeamMembers(this.team.teamID)
-        .subscribe( employees => {
-          this.employees = employees;
-        });*/
+    this.teamsService.getTeamMembers(this.team.teamID)
+      .subscribe(employees => {
+        this.employees = employees;
+      });
   }
 
   openRemoveEmployee(user: User) {

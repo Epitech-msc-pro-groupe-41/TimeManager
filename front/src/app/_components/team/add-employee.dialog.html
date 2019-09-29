@@ -1,0 +1,28 @@
+<form (ngSubmit)="onSubmit()">
+  <h3 mat-dialog-title>{{userMissing ?
+      'Choose the user to be added to ' + currentTeam.name :
+      'Choose the team to add ' + currentUser.firstName + ' ' + currentUser.lastName + ' to'}}</h3>
+  <div mat-dialog-content>
+    <mat-form-field *ngIf="userMissing">
+      <mat-label>User</mat-label>
+      <mat-select [(value)]="currentUser">
+        <mat-option *ngFor="let user of usersService.users" [value]="user">
+          {{user.firstName + ' ' + user.lastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="!userMissing">
+      <mat-label>Team</mat-label>
+      <mat-select [(value)]="currentTeam">
+        <mat-option *ngFor="let team of teamsServices.teams" [value]="team">
+          {{team.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+    <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
+    <button [disabled]="!isFormValid()" type="submit" mat-raised-button autofocus color="primary"> Add
+    </button>
+  </div>
+</form>

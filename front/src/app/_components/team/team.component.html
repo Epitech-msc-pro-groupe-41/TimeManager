@@ -1,7 +1,7 @@
 <button mat-icon-button (click)="goToTeams()">
   <mat-icon color="warn">keyboard_arrow_left</mat-icon>
 </button>
-<div style="text-align: center; margin: 0 15%" fxLayout="column">
+<div *ngIf="team" style="text-align: center; margin: 0 15%" fxLayout="column">
   <div fxLayout="row" fxLayoutAlign="space-between">
     <h3 style="margin-top: auto; margin-bottom: auto;">{{team.name}}</h3>
     <div>
@@ -14,13 +14,13 @@
     </div>
 
   </div>
-  <button style="margin: 10px 0" mat-raised-button color="primary">
+  <button style="margin: 10px 0" (click)="openAddEmployeeDialog()" mat-raised-button color="primary">
     Add employee
   </button>
   <h4>Employees</h4>
   <mat-card style="margin-top: 10px" fxLayout="row" fxLayoutAlign="space-between"
             *ngFor="let employee of employees">
-    <p style="margin-top: auto; margin-bottom: auto">{{'[ ' + employee.firstName + '  ' + employee.lastName + ' ] ' + employee.email}}</p>
+    <p style="margin-top: auto; margin-bottom: auto">{{'[ ' + employee.type +  ' ]' + employee.firstName + ' ' + employee.lastName}}</p>
     <button mat-icon-button (click)="openRemoveEmployee(employee)">
       <mat-icon color="warn">remove_circle_outline</mat-icon>
     </button>

@@ -24,46 +24,27 @@ export class TeamsService {
       .subscribe(user => {
         this.currentUser = user;
       });
-    this.teams = [
-      {
-        name: 'Team1',
-        teamID: '1234567',
-        managerID: '12345678',
-        createDate: new Date(123456789)
-      },
-      {
-        name: 'Team2',
-        teamID: '1234567',
-        managerID: '12345678',
-        createDate: new Date(123456789)
-      },
-      {
-        name: 'Team3',
-        teamID: '1234567',
-        managerID: '12345678',
-        createDate: new Date(123456789)
-      },
-    ];
+    this.teams = [];
   }
 
   getAllTeams() {
-   /* return this.http.get<any>(environment.apiUrl + 'teams/' + this.currentUser.userID)
+    return this.http.get<any>(environment.apiUrl + 'teams?managerID=' + this.currentUser.userID)
       .subscribe(teams => {
         if (teams) {
           this.teams = teams;
         }
-      });*/
+      }, error => {
+        this.notifs.showError('Can\'t get teams');
+      });
   }
 
   createTeam(name: string) {
     return this.http.post<any>(environment.apiUrl + 'teams/' + this.currentUser.userID,
       {
         name
-      }).subscribe( response => {
-        if (response) {
-          this.notifs.showSuccess('Team created');
-          this.getAllTeams();
-        }
+      }).subscribe(response => {
+      this.notifs.showSuccess('Team created');
+      this.getAllTeams();
     }, error => {
       this.notifs.showError('Team not created');
     });
@@ -88,7 +69,7 @@ export class TeamsService {
     return this.http.get<any>(environment.apiUrl + 'teamMembers/' + teamID);
   }
 
-  addUserToTeam(userID: string, teamID: string) {
+  addUserToTeam({userID, teamID}) {
     return this.http.post<any>(environment.apiUrl + 'teamMembers', {
       userID,
       teamID

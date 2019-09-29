@@ -15,7 +15,7 @@ import {
   LoginComponent,
   NavbarComponent, ProfilComponent,
   RegisterComponent, TeamComponent,
-  TeamsComponent, UpdateWorkingtimeDialog,
+  TeamsComponent, UpdateWorkingtimeDialog, UsersComponent,
   WorkingtimesComponent
 } from './_components';
 import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
@@ -28,6 +28,8 @@ import {DeleteTeamDialog} from './_components/team/delete-team.dialog';
 import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import {AddEmployeeDialog} from './_components/team/add-employee.dialog';
+import {ChangeRoleDialog} from './_components/users/change-role.dialog';
 
 @NgModule({
   imports: [
@@ -58,6 +60,9 @@ import { environment } from '../environments/environment';
     UpdateTeamDialog,
     DeleteTeamDialog,
     RemoveEmployeeDialog,
+    UsersComponent,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
   ],
   entryComponents: [
     UpdateWorkingtimeDialog,
@@ -65,6 +70,8 @@ import { environment } from '../environments/environment';
     UpdateTeamDialog,
     DeleteTeamDialog,
     RemoveEmployeeDialog,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

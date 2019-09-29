@@ -41,11 +41,33 @@ public class TeamService {
 		Team team = null;
 		if (teamID == null || teamID.isEmpty()) {
 			if (trigger) {
-				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid value for team name");
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid value for teamID");
 			}
 		} else {
 			Query query = new Query();
 			query.addCriteria(Criteria.where("teamID").is(teamID));
+
+			List<Team> teams = teamRepository.find(query);
+			if (teams == null || teams.size() == 0) {
+				if (trigger) {
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No team for this teamID");
+				}
+			} else {
+				team = teams.get(0);
+			}
+		}
+		return team;
+	}
+
+	public Team getTeamByName(String teamName, String managerID, boolean trigger) {
+		Team team = null;
+		if (teamName == null || teamName.isEmpty() || managerID.isEmpty()) {
+			if (trigger) {
+				throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid value for arguments");
+			}
+		} else {
+			Query query = new Query();
+			query.addCriteria(Criteria.where("name").is(teamName).and("managerID").is(managerID));
 
 			List<Team> teams = teamRepository.find(query);
 			if (teams == null || teams.size() == 0) {
@@ -64,12 +86,17 @@ public class TeamService {
 			User user = userService.getUserById(managerID, true);
 			if (user.getType().toUpperCase().equals(UserType.Manager.name().toUpperCase())
 					|| user.getType().toUpperCase().equals(UserType.Admin.name().toUpperCase())) {
-				Team team = new Team();
-				team.setCreateDate(System.currentTimeMillis());
-				team.setManagerID(managerID);
-				team.setTeamID("TM" + UUID.randomUUID().toString());
-				team.setName(in.getName());
-				teamRepository.create(team);
+				if (getTeamByName(in.getName(), managerID, false) == null) {
+					Team team = new Team();
+					team.setCreateDate(System.currentTimeMillis());
+					team.setManagerID(managerID);
+					team.setTeamID("TM" + UUID.randomUUID().toString());
+					team.setName(in.getName());
+					teamRepository.create(team);
+				} else {
+					throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+							"A team with this name already exist for this user");
+				}
 			} else {
 				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
 						"User ID given in parameter have not enough permissions to manage a team");

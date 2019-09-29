@@ -1,0 +1,18 @@
+<form (ngSubmit)="onSubmit()">
+  <h3 mat-dialog-title> Change the {{ user.firstName + ' ' + user.lastName }}'s role</h3>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>User</mat-label>
+      <mat-select [(value)]="type">
+        <mat-option value="Employee">Employee</mat-option>
+        <mat-option value="Manager">Manager</mat-option>
+        <mat-option value="Admin">Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+    <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
+    <button [disabled]="!isFormValid()" type="submit" mat-raised-button autofocus color="primary">Change
+    </button>
+  </div>
+</form>
