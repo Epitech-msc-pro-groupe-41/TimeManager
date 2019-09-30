@@ -117,7 +117,7 @@ export class TeamComponent implements OnInit {
 
   showUser(user: User) {
     if (user) {
-      this.router.navigate(['users/' + user.userID]);
+      this.router.navigate(['users/' + user.userID], { queryParams: { returnUrl: '/teams/' + this.team.teamID }});
     }
   }
 

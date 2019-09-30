@@ -11,6 +11,7 @@ import {User} from '../../_models';
 export class UserComponent implements OnInit {
 
   user: User;
+  returnUrl: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,16 +22,17 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || 'users';
     if (this.route.snapshot.params.userID) {
       this.refreshUser();
     } else {
-      this.router.navigate(['users']);
+      this.router.navigate([this.returnUrl]);
       this.notifs.showError('No UserID specified');
     }
   }
 
-  goToUsers() {
-    this.router.navigate(['users']);
+  goBack() {
+    this.router.navigate([this.returnUrl]);
   }
 
   refreshUser() {
@@ -40,7 +42,7 @@ export class UserComponent implements OnInit {
           this.user = response;
         }
       }, error => {
-        this.router.navigate(['user']);
+        this.router.navigate([this.returnUrl]);
         this.notifs.showError('Bad userID');
       });
   }
