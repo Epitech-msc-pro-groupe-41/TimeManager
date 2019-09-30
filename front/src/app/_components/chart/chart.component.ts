@@ -23,7 +23,7 @@ export class ChartComponent implements OnInit {
   scale = 'daily';
 
   chartDatasets: Array<any> = [
-    {data: []}
+    {data: [], label: 'Hours worked' }
   ];
 
   chartLabels: Array<any> = [];
