@@ -5,7 +5,7 @@ import {
   DashboardComponent,
   LoginComponent, ProfilComponent,
   RegisterComponent, TeamComponent,
-  TeamsComponent, UsersComponent,
+  TeamsComponent, UserComponent, UsersComponent,
   WorkingtimesComponent
 } from './_components';
 
@@ -32,6 +32,11 @@ const routes: Routes = [
     },
   {
     path: 'users', component: UsersComponent, canActivate: [AuthGuard], data: {
+      allowedRoles: ['Admin', 'Manager']
+    }
+  },
+  {
+    path: 'users/:userID', component: UserComponent, canActivate: [AuthGuard], data: {
       allowedRoles: ['Admin', 'Manager']
     }
   },

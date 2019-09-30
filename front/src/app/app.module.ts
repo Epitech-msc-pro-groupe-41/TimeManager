@@ -30,6 +30,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {AddEmployeeDialog} from './_components/team/add-employee.dialog';
 import {ChangeRoleDialog} from './_components/users/change-role.dialog';
+import { ChartComponent } from './_components/chart/chart.component';
+import { UserComponent } from './_components/user/user.component';
 
 @NgModule({
   imports: [
@@ -63,6 +65,8 @@ import {ChangeRoleDialog} from './_components/users/change-role.dialog';
     UsersComponent,
     AddEmployeeDialog,
     ChangeRoleDialog,
+    ChartComponent,
+    UserComponent,
   ],
   entryComponents: [
     UpdateWorkingtimeDialog,

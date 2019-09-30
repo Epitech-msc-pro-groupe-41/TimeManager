@@ -5,7 +5,7 @@
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
       <mat-card-title style="color: darkred">[{{user.type}}]</mat-card-title>
      <div fxLayout="row">
-       <button mat-icon-button>
+       <button mat-icon-button (click)="showUser(user)">
          <mat-icon>remove_red_eye</mat-icon>
        </button>
      </div>

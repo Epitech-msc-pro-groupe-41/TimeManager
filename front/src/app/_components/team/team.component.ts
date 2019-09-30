@@ -115,6 +115,12 @@ export class TeamComponent implements OnInit {
     });
   }
 
+  showUser(user: User) {
+    if (user) {
+      this.router.navigate(['users/' + user.userID]);
+    }
+  }
+
   getEmployees() {
     this.teamsService.getTeamMembers(this.team.teamID)
       .subscribe(employees => {

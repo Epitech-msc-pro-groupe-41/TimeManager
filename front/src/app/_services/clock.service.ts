@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {UserService} from './user.service';
 import {Clock} from '../_models';
 import {NotificationsService} from './notifications.service';
+import {WorkingtimeService} from './workingtime.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class ClockService {
 
   constructor(private http: HttpClient,
               private userService: UserService,
-              private notifs: NotificationsService) {
+              private notifs: NotificationsService,
+              private wtService: WorkingtimeService) {
     this.currentClock = new Clock();
     this.currentClock.status = false;
   }
@@ -46,6 +48,7 @@ export class ClockService {
           if (response) {
             this.currentClock.status = response.status;
             this.getClock();
+            this.wtService.getWorkingTimes();
           }
         }, error =>  {
           this.notifs.showError(error);

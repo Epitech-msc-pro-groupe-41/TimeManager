@@ -29,6 +29,10 @@ export class UsersService {
       });
   }
 
+  getUserByID(userID: string) {
+    return this.http.get<any>(environment.apiUrl + 'users/' + userID);
+  }
+
   changeRole({userID, type}) {
     if (type === 'Employee' || type === 'Admin' || type === 'Manager') {
       return this.http.post<any>(environment.apiUrl + 'users/changeRole/' + userID +

@@ -1,0 +1,8 @@
+<div *ngIf="user">
+  <button mat-icon-button (click)="goToUsers()">
+    <mat-icon color="warn">keyboard_arrow_left</mat-icon>
+  </button>
+  <h3 style="text-align: center">Dashboard of {{user.firstName + ' ' + user.lastName}}</h3>
+  <app-chart [user]="user"></app-chart>
+</div>
+
