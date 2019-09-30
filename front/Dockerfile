@@ -1,17 +1,12 @@
-# Use an official node runtime as a parent image
-FROM node
+FROM node:12.2.0
 
-# Set the working directory
 WORKDIR /front
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY package*.json /front/
 
-# Install dependencies
 RUN npm install
 
-#Copy the current directory contents into the container
-COPY . .
+COPY ./ /front/
 
 # The container listens on the specified network ports at runtime
 EXPOSE 8080

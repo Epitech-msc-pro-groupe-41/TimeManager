@@ -1,0 +1,21 @@
+<div style="text-align: center; margin: 0 15%" fxLayout="column">
+  <h3>Users</h3>
+  <mat-card style="margin-top: 10px"
+            *ngFor="let user of usersService.users">
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between">
+      <mat-card-title style="color: darkred">[{{user.type}}]</mat-card-title>
+     <div fxLayout="row">
+       <button mat-icon-button (click)="showUser(user)">
+         <mat-icon>remove_red_eye</mat-icon>
+       </button>
+     </div>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{user.firstName + ' ' + user.lastName}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button [disabled]="!userService.isAdmin()" (click)="openChangeRoleDialog(user)" mat-stroked-button color="primary"> Change Role</button>
+      <button mat-raised-button color="primary" (click)="openAddEmployeeDialog(user)"> Add to team</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

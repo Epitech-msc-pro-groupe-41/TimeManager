@@ -1,0 +1,36 @@
+<button mat-icon-button (click)="goToTeams()">
+  <mat-icon color="warn">keyboard_arrow_left</mat-icon>
+</button>
+<div *ngIf="team" style="text-align: center; margin: 0 15%" fxLayout="column">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <h3 style="margin-top: auto; margin-bottom: auto;">{{team.name}}</h3>
+    <div>
+      <button mat-icon-button (click)="openUpdateTeamDialog()">
+        <mat-icon >edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openDeleteTeamDialog()">
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
+    </div>
+
+  </div>
+  <button style="margin: 20px 0" (click)="openAddEmployeeDialog()" mat-raised-button color="primary">
+    Add employee
+  </button>
+
+  <app-chart [team]="team"></app-chart>
+  <h3>Employees</h3>
+  <mat-card style="margin-top: 10px" fxLayout="row" fxLayoutAlign="space-between"
+            *ngFor="let employee of employees">
+    <p style="margin-top: auto; margin-bottom: auto">{{'[ ' + employee.type +  ' ]' + employee.firstName + ' ' + employee.lastName}}</p>
+    <div fxLayout="row">
+      <button mat-icon-button (click)="showUser(employee)">
+        <mat-icon>remove_red_eye</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openRemoveEmployee(employee)">
+        <mat-icon color="warn">remove_circle_outline</mat-icon>
+      </button>
+    </div>
+
+  </mat-card>
+</div>

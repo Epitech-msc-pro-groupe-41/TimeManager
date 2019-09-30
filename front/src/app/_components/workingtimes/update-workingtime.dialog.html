@@ -1,13 +1,47 @@
-<h1 mat-dialog-title>Working time {{wt.workingTimeID ? 'Edition' : 'Creation'}}</h1>
-<div mat-dialog-content fxLayout="column">
-  <mat-form-field>
-    <input matInput placeholder="start" type="datetime-local" [(ngModel)]="_start">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="end" type="datetime-local" [(ngModel)]="_end">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
-  <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
-  <button [disabled]="!isFormValid()" mat-raised-button color="primary" (click)="onSubmit()" >{{wt.workingTimeID ? 'Update' : 'Create'}}</button>
-</div>
+<form (ngSubmit)="onSubmit()">
+  <h1 mat-dialog-title>Working time {{wt.workingTimeID ? 'Edition' : 'Creation'}}</h1>
+  <div mat-dialog-content fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field style="width: 50%">
+        <input name="startDate" matInput [matDatepicker]="startPicker" placeholder="Start Date" [(ngModel)]="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="24" name="startHours" matInput placeholder="H" type="number" [(ngModel)]="startHours">
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="59" name="startMinutes" matInput placeholder="M" type="number" [(ngModel)]="startMinutes">
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="59" name="startSecondes" matInput placeholder="S" type="number" [(ngModel)]="startSeconds">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field style="width: 50%">
+        <input name="endDate" matInput [matDatepicker]="endPicker" placeholder="End Date" [(ngModel)]="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="60" name="ndHours" matInput placeholder="H" type="number" [(ngModel)]="endHours">
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="60" name="endMinutes" matInput placeholder="M" type="number" [(ngModel)]="endMinutes">
+      </mat-form-field>
+
+      <mat-form-field style="width: 13%">
+        <input min="0" max="60" name="endSecondes" matInput placeholder="S" type="number" [(ngModel)]="endSeconds">
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+    <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
+    <button type="submit" [disabled]="!isFormValid()" mat-raised-button color="primary" >{{wt.workingTimeID ? 'Update' : 'Create'}}</button>
+  </div>
+</form>

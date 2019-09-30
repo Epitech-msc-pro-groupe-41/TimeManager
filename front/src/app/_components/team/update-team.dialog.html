@@ -1,0 +1,13 @@
+<form (ngSubmit)="onSubmit()">
+  <h1 mat-dialog-title>Team {{data ? 'Edition' : 'Creation'}}</h1>
+  <div mat-dialog-content fxLayout="column">
+    <mat-form-field>
+      <input name="name" matInput placeholder="Name" [(ngModel)]="teamName">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between">
+    <button mat-stroked-button color="primary" (click)="onNoClick()">Cancel</button>
+    <button type="submit" [disabled]="!isFormValid()" mat-raised-button color="primary" >{{data ? 'Update' : 'Create'}}</button>
+  </div>
+</form>
+

@@ -14,8 +14,8 @@ import {
   DashboardComponent,
   LoginComponent,
   NavbarComponent, ProfilComponent,
-  RegisterComponent,
-  TeamsComponent, UpdateWorkingtimeDialog,
+  RegisterComponent, TeamComponent,
+  TeamsComponent, UpdateWorkingtimeDialog, UsersComponent,
   WorkingtimesComponent
 } from './_components';
 import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-workingtime.dialog';
@@ -23,6 +23,13 @@ import {DeleteWorkingtimeDialog} from './_components/workingtimes/delete-working
 import {ChartsModule, MDBBootstrapModule} from 'angular-bootstrap-md';
 import {JwtInterceptor} from './_helpers/jwt.interceptor';
 import {ErrorInterceptor} from './_helpers';
+import {UpdateTeamDialog} from './_components/team/update-team.dialog';
+import {DeleteTeamDialog} from './_components/team/delete-team.dialog';
+import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
+import {AddEmployeeDialog} from './_components/team/add-employee.dialog';
+import {ChangeRoleDialog} from './_components/users/change-role.dialog';
+import { ChartComponent } from './_components/chart/chart.component';
+import { UserComponent } from './_components/user/user.component';
 
 @NgModule({
   imports: [
@@ -48,10 +55,24 @@ import {ErrorInterceptor} from './_helpers';
     ProfilComponent,
     UpdateWorkingtimeDialog,
     DeleteWorkingtimeDialog,
+    TeamComponent,
+    UpdateTeamDialog,
+    DeleteTeamDialog,
+    RemoveEmployeeDialog,
+    UsersComponent,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
+    ChartComponent,
+    UserComponent,
   ],
   entryComponents: [
     UpdateWorkingtimeDialog,
     DeleteWorkingtimeDialog,
+    UpdateTeamDialog,
+    DeleteTeamDialog,
+    RemoveEmployeeDialog,
+    AddEmployeeDialog,
+    ChangeRoleDialog,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

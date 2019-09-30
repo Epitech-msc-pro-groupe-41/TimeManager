@@ -10,8 +10,15 @@ export class UpdateWorkingtimeDialog {
 
   wt: WorkingTime;
 
-  _start: string;
-  _end: string;
+  startDate: Date;
+  startHours: number;
+  startMinutes: number;
+  startSeconds: number;
+
+  endDate: Date;
+  endHours: number;
+  endMinutes: number;
+  endSeconds: number;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateWorkingtimeDialog>,
@@ -22,8 +29,16 @@ export class UpdateWorkingtimeDialog {
       this.wt.end = new Date(data.end);
       this.wt.workingTimeID = data.workingTimeID;
 
-      this._start = this.wt.start.toISOString().slice(0, 16);
-      this._end = this.wt.end.toISOString().slice(0, 16);
+      this.startDate = new Date(this.wt.start);
+      this.startHours = this.wt.start.getHours();
+      this.startMinutes = this.wt.start.getMinutes();
+      this.startSeconds = this.wt.start.getSeconds();
+
+      this.endDate = new Date(this.wt.end);
+      this.endHours = this.wt.end.getHours();
+      this.endMinutes = this.wt.end.getMinutes();
+      this.endSeconds = this.wt.end.getSeconds();
+
     }
   }
 
@@ -32,13 +47,21 @@ export class UpdateWorkingtimeDialog {
   }
 
   isFormValid() {
-    return this.wt && this._start && this._end;
+    return this.wt && this.startDate && this.endDate;
   }
 
   onSubmit() {
     if (this.isFormValid()) {
-      const start = new Date(this._start);
-      const end = new Date(this._end);
+      const start = new Date(this.startDate);
+      start.setHours(this.startHours);
+      start.setMinutes(this.startMinutes);
+      start.setSeconds(this.startSeconds);
+
+      const end = new Date(this.endDate);
+      end.setHours(this.endHours);
+      end.setMinutes(this.endMinutes);
+      end.setSeconds(this.endSeconds);
+
       if (start && end) {
         this.wt.start = start;
         this.wt.end = end;
