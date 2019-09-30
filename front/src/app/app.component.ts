@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClockService, UserService} from './_services';
 
 @Component({
@@ -6,7 +6,10 @@ import {ClockService, UserService} from './_services';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+  intervalID;
+  clock: Date;
 
   constructor(
     public userService: UserService,
@@ -15,18 +18,27 @@ export class AppComponent implements OnInit {
 
   }
 
-  getWorkingHour() {
+  ngOnInit() {
+    this.clockService.getClock();
+
+    this.intervalID = setInterval(self => {
+      self.updateClock();
+    }, 1000, this);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalID);
+  }
+
+  updateClock() {
     if (this.clockService.currentClock
       && this.clockService.currentClock.time
       && this.clockService.currentClock.status) {
-      const time = new Date(Date.now().valueOf() - this.clockService.currentClock.time.valueOf());
-      return  `${Math.floor(time.getSeconds() / 3600)}:${Math.floor(time.getSeconds() / 60)}:${time.getSeconds() % 60}`;
+      this.clock = new Date(Date.now().valueOf() - this.clockService.currentClock.time.valueOf());
+      this.clock.setHours(this.clock.getHours() - 1);
     } else {
-      return '00:00:00';
+      this.clock = undefined;
     }
   }
 
-  ngOnInit(): void {
-    this.clockService.getClock();
-  }
 }

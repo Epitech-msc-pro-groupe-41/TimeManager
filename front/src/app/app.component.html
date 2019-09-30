@@ -4,7 +4,7 @@
     <div style="text-align: center">
       <h4>Clock</h4>
       <div *ngIf="clockService.currentClock">
-        <h4>{{getWorkingHour()}}</h4>
+        <h4>{{clock | date:'H:mm:ss'}}</h4>
         <button mat-raised-button color="warn" *ngIf="clockService.currentClock.status" (click)="clockService.clock()">Stop Clock</button>
         <button mat-raised-button color="primary" *ngIf="!clockService.currentClock.status" (click)="clockService.clock()" >Start Clock</button>
       </div>
