@@ -86,7 +86,7 @@ public class StatisticService {
         StatsDailyResponseDto response = new StatsDailyResponseDto();
         ArrayList<StatsElementResponseDto> userDailyHours = new ArrayList<>();
         Map<String, Integer> data = new LinkedHashMap<>();
-        List<WorkingTimeResponseDto> workingTimes = workingTimeService.getAllWorkingTimes(userID);
+        List<WorkingTimeResponseDto> workingTimes = workingTimeService.getWorkingTimes(userID, start, end);
 
         if (start > end) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid date values");
@@ -184,7 +184,7 @@ public class StatisticService {
             data.put(date.toString() + ";" + date.plusDays(6).toString(), 0);
         }
 
-        List<WorkingTimeResponseDto> workingTimes = workingTimeService.getAllWorkingTimes(userID);
+        List<WorkingTimeResponseDto> workingTimes = workingTimeService.getWorkingTimes(userID, start, end);
         for (WorkingTimeResponseDto w : workingTimes) {
             try {
                 LocalDate date = LocalDate.parse(Utils.dateLongToString(w.getStart()));
