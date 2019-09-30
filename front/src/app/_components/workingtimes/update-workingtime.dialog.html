@@ -9,15 +9,15 @@
       </mat-form-field>
 
       <mat-form-field style="width: 13%">
-        <input min="0" max="60" name="startHours" matInput placeholder="H" type="number" [(ngModel)]="startHours">
+        <input min="0" max="24" name="startHours" matInput placeholder="H" type="number" [(ngModel)]="startHours">
       </mat-form-field>
 
       <mat-form-field style="width: 13%">
-        <input min="0" max="60" name="startMinutes" matInput placeholder="M" type="number" [(ngModel)]="startMinutes">
+        <input min="0" max="59" name="startMinutes" matInput placeholder="M" type="number" [(ngModel)]="startMinutes">
       </mat-form-field>
 
       <mat-form-field style="width: 13%">
-        <input min="0" max="60" name="startSecondes" matInput placeholder="S" type="number" [(ngModel)]="startSeconds">
+        <input min="0" max="59" name="startSecondes" matInput placeholder="S" type="number" [(ngModel)]="startSeconds">
       </mat-form-field>
     </div>
     <div fxLayout="row" fxLayoutAlign="space-between">

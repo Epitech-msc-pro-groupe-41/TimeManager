@@ -28,6 +28,8 @@ import {DeleteTeamDialog} from './_components/team/delete-team.dialog';
 import {RemoveEmployeeDialog} from './_components/team/remove-employee.dialog';
 import {AddEmployeeDialog} from './_components/team/add-employee.dialog';
 import {ChangeRoleDialog} from './_components/users/change-role.dialog';
+import { ChartComponent } from './_components/chart/chart.component';
+import { UserComponent } from './_components/user/user.component';
 
 @NgModule({
   imports: [
@@ -60,6 +62,8 @@ import {ChangeRoleDialog} from './_components/users/change-role.dialog';
     UsersComponent,
     AddEmployeeDialog,
     ChangeRoleDialog,
+    ChartComponent,
+    UserComponent,
   ],
   entryComponents: [
     UpdateWorkingtimeDialog,

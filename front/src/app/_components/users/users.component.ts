@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material';
 import {User} from '../../_models';
 import {RemoveEmployeeDialog} from '../team/remove-employee.dialog';
 import {ChangeRoleDialog} from './change-role.dialog';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -19,11 +20,18 @@ export class UsersComponent implements OnInit {
     public dialog: MatDialog,
     private teamsService: TeamsService,
     private notifs: NotificationsService,
+    private router: Router,
   ) {
   }
 
   ngOnInit() {
     this.usersService.getUsers();
+  }
+
+  showUser(user: User) {
+    if (user) {
+      this.router.navigate(['users/' + user.userID]);
+    }
   }
 
   openAddEmployeeDialog(user: User) {

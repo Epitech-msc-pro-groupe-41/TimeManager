@@ -8,3 +8,4 @@ export * from './profil/profil.component';
 export * from './teams/teams.component';
 export * from './team/team.component';
 export * from './users/users.component';
+export * from './user/user.component';

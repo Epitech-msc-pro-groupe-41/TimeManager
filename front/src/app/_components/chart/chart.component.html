@@ -1,0 +1,37 @@
+<div style="margin: 0 20px" fxLayout="row" fxLayoutAlign="space-between">
+  <mat-form-field>
+    <input name="startDate" (ngModelChange)="startChange($event)" matInput [matDatepicker]="startPicker" placeholder="Start Date" [(ngModel)]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Chart Type</mat-label>
+    <mat-select [(ngModel)]="chartType">
+      <mat-option *ngFor="let type of ChartType" [value]="type.value">{{type.label}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Scale</mat-label>
+    <mat-select (ngModelChange)="scaleChange($event)"  [(ngModel)]="scale">
+      <mat-option value="daily">Daily</mat-option>
+      <mat-option value="weekly">Weekly</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input name="endDate" matInput (ngModelChange)="endChange($event)" [matDatepicker]="endPicker" placeholder="End Date" [(ngModel)]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+</div>
+
+<div style="display: block">
+  <canvas mdbChart
+          [chartType]="chartType"
+          [datasets]="chartDatasets"
+          [labels]="chartLabels"
+          [colors]="chartColors"
+          [options]="chartOptions">
+  </canvas>
+</div>
