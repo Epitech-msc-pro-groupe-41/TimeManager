@@ -74,8 +74,7 @@ public class WorkingTimeService {
         } else {
 
             Query query = new Query();
-            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID))
-                    .orOperator(Criteria.where("start").gte(start), Criteria.where("end").lte(end)));
+            query.addCriteria(new Criteria().andOperator(Criteria.where("userID").is(userID).and("start").gte(start).and("end").lte(end)));
             workingTimes = workingTimeRepository.find(query);
             if (workingTimes != null) {
                 for (WorkingTime workingTime : workingTimes) {
