@@ -47,7 +47,9 @@ export class ClockService {
           console.log('getClock: ', response);
           if (response) {
             this.currentClock.status = response.status;
-            this.getClock();
+            if (response.status) {
+              this.getClock();
+            }
             this.wtService.getWorkingTimes();
           }
         }, error =>  {
